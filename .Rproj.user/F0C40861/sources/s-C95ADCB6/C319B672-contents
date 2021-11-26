@@ -1,0 +1,12 @@
+---
+title: "Contact Me"
+description: |
+  Feel free to reach out to me
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+[![GitHub](images/GitHub-Mark-32px.png)](https://github.com/mpalmore)| [![Email](images/Mail-Icon-White-on-Grey.png)](mailto:mpalmor1@jhmi.com)| [![Phone](images/phone_icon.png)](tel:540-272-1481)
+

@@ -1,0 +1,10 @@
+---
+title: "Projects"
+description: |
+  My portfolio of data science projects
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+

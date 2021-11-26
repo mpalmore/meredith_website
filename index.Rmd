@@ -1,0 +1,33 @@
+---
+title: "Meredith Palmore"
+description: |
+  Epidemiology | Genetics | Data science
+site: distill::distill_website
+---
+
+
+![](images/Profile_photo.jpg)
+
+***Hi, I'm Meredith!***
+I am currently a Master of Health Science student at Johns Hopkins University's Bloomberg School of Public Health studying Genetic Epidemiology. 
+
+I am passionate about leveraging data science tools to answer complex public health questions. I am particularly interested in understanding the roles of genetic and environmental factors in the etiology of chronic diseases. During my schooling, I have actively participated in and supported diverse and interdisciplinary research projects, spanning the topics of molecular biology, genetics, epigenetics, social science, and clinical research.  
+
+I am also an advocate for health equity and dedicated to improving the health of underserved communities through my research and volunteerism. 
+
+***Contact Me:***
+[![Email](images/Mail-Icon-White-on-Grey.png)](mailto:mpalmor1@jhmi.com)
+[![Phone](images/phone_icon.png)](tel:540-272-1481)
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating websites with Distill at:
+# https://rstudio.github.io/distill/website.html
+
+# Learn more about publishing to GitHub Pages at:
+# https://rstudio.github.io/distill/publish_website.html#github-pages
+
+```
+
