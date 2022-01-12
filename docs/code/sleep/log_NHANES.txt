@@ -1,0 +1,1586 @@
+Rows: 9,254
+Columns: 46
+$ SEQN            [3m[38;5;246m<dbl>[39m[23m 93703, 93704, 93705, 93706, 93707, 93708, 93709, 93710, 93711, 93712, 93713, 9371~
+$ RIAGENDR        [3m[38;5;246m<dbl>[39m[23m 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 1, 1, ~
+$ RIDAGEYR        [3m[38;5;246m<dbl>[39m[23m 2, 2, 66, 18, 13, 66, 75, 0, 56, 18, 67, 54, 71, 61, 22, 45, 13, 1, 60, 60, 64, 5~
+$ RIDRETH3        [3m[38;5;246m<dbl>[39m[23m 6, 3, 4, 6, 7, 6, 4, 3, 6, 1, 3, 4, 7, 6, 3, 4, 3, 4, 1, 3, 3, 4, 3, 1, 6, 4, 4, ~
+$ WTINT2YR        [3m[38;5;246m<dbl>[39m[23m 9246.492, 37338.768, 8614.571, 8548.633, 6769.345, 13329.451, 12043.388, 16418.29~
+$ WTMEC2YR        [3m[38;5;246m<dbl>[39m[23m 8539.731, 42566.615, 8338.420, 8723.440, 7064.610, 14372.489, 12277.557, 16848.02~
+$ SDMVPSU         [3m[38;5;246m<dbl>[39m[23m 2, 1, 2, 2, 1, 2, 1, 1, 2, 2, 1, 1, 2, 1, 1, 1, 1, 1, 2, 1, 1, 2, 1, 2, 2, 1, 1, ~
+$ SDMVSTRA        [3m[38;5;246m<dbl>[39m[23m 145, 143, 145, 134, 138, 138, 136, 134, 134, 147, 140, 147, 139, 143, 145, 144, 1~
+$ INDFMPIR        [3m[38;5;246m<dbl>[39m[23m 5.00, 5.00, 0.82, NA, 1.88, 1.63, 0.41, 4.90, 5.00, 0.76, 2.65, 1.86, 1.56, 5.00,~
+$ SLD012          [3m[38;5;246m<dbl>[39m[23m NA, NA, 8.0, 10.5, NA, 8.0, 7.0, NA, 7.0, 7.5, 5.5, 7.0, 5.0, 7.0, 8.0, 8.0, NA, ~
+$ SLD013          [3m[38;5;246m<dbl>[39m[23m NA, NA, 8.0, 11.5, NA, 8.0, 6.5, NA, 9.0, 9.0, 7.0, 8.0, 5.0, 9.0, 10.0, 11.0, NA~
+$ SLQ120          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 1, NA, 2, 1, NA, 3, 2, 2, 3, 4, 3, 1, 2, NA, NA, 0, 0, 2, NA, NA, 1, 0~
+$ day_sleep       [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, 0, NA, 1, 0, 0, 1, 1, 1, 0, 0, NA, NA, 0, 0, 0, NA, NA, 0, 0~
+$ ALQ111          [3m[38;5;246m<dbl>[39m[23m NA, NA, 1, 2, NA, 2, NA, NA, 1, 1, 1, 1, 1, 1, 1, 1, NA, NA, 1, 1, 1, NA, NA, 1, ~
+$ ALQ121          [3m[38;5;246m<dbl>[39m[23m NA, NA, 7, NA, NA, NA, NA, NA, 5, 0, 6, 9, 0, 7, 1, 0, NA, NA, 5, 7, 0, NA, NA, 6~
+$ ALQ130          [3m[38;5;246m<dbl>[39m[23m NA, NA, 1, NA, NA, NA, NA, NA, 1, NA, 3, 1, NA, 2, 15, NA, NA, NA, 1, 1, NA, NA, ~
+$ PAQ605          [3m[38;5;246m<dbl>[39m[23m NA, NA, 2, 2, NA, 2, 2, NA, 2, 1, 2, 2, 1, 2, 2, 2, NA, NA, 2, 2, 1, NA, NA, 2, 2~
+$ PAQ620          [3m[38;5;246m<dbl>[39m[23m NA, NA, 2, 2, NA, 2, 1, NA, 2, 1, 2, 2, 1, 2, 2, 2, NA, NA, 2, 2, 1, NA, NA, 2, 1~
+$ PAQ650          [3m[38;5;246m<dbl>[39m[23m NA, NA, 2, 2, NA, 2, 2, NA, 1, 1, 2, 2, 1, 1, 2, 2, NA, NA, 2, 2, 1, NA, NA, 2, 2~
+$ PAQ665          [3m[38;5;246m<dbl>[39m[23m NA, NA, 1, 1, NA, 1, 2, NA, 1, 1, 1, 2, 2, 1, 2, 1, NA, NA, 2, 2, 2, NA, NA, 1, 1~
+$ BMXBMI          [3m[38;5;246m<dbl>[39m[23m 17.5, 15.7, 31.7, 21.5, 18.1, 23.7, 38.9, NA, 21.3, 19.7, 23.5, 39.9, 22.5, 30.7,~
+$ DR1TCAFF        [3m[38;5;246m<dbl>[39m[23m NA, 8, 361, 0, 21, 33, NA, 0, 347, 0, 385, 60, 432, 95, 70, NA, 50, 3, 395, 48, 2~
+$ DR2TCAFF        [3m[38;5;246m<dbl>[39m[23m NA, 6, 146, NA, 10, 0, NA, 1, 331, 137, 339, 63, 340, 99, 66, NA, 1, 0, 192, 54, ~
+$ avg_mg_caffeine [3m[38;5;246m<dbl>[39m[23m NA, 7.0, 253.5, NA, 15.5, 16.5, NA, 0.5, 339.0, 68.5, 362.0, 61.5, 386.0, 97.0, 6~
+$ DPQ010          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 1, 0, 1, 1, 0, 0, 1, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ020          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 1, 0, 0, 0, 1, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ030          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 1, 1, 2, 0, 3, 0, 0, NA, NA, NA, 0, 1, 0, NA, NA, 0,~
+$ DPQ040          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 0, 1, 1, 1, 1, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ050          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 1, 0, 0, 0, 0, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ060          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 1, 0, 0, 0, 1, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ070          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 2, 0, 0, 0, 1, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ080          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 0, 0, 0, 1, 0, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ090          [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 0, 0, 0, 0, 0, NA, NA, NA, 0, 0, 0, NA, NA, 0,~
+$ DPQ100          [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, 0, 0, 1, 0, 0, 0, 1, NA, NA, NA, NA, 0, NA, NA, N~
+$ SMQ681          [3m[38;5;246m<dbl>[39m[23m NA, NA, 2, 2, 2, 2, NA, NA, 2, 1, 1, 2, 1, 2, 1, 2, 2, NA, 2, 2, 2, NA, NA, 2, 2,~
+$ depress_score   [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 2, 1, 8, 2, 4, 2, 5, NA, NA, NA, 0, 1, 0, NA, NA, 0,~
+$ depress_cat     [3m[38;5;246m<chr>[39m[23m NA, NA, "nodep", "nodep", NA, "nodep", NA, NA, "nodep", "nodep", "mild_dep", "nod~
+$ race1           [3m[38;5;246m<chr>[39m[23m "NH Asian", "NH White and Other", "NH Black", "NH Asian", "NH White and Other", "~
+$ raceEthCat      [3m[38;5;246m<chr>[39m[23m "NH Asian", "NH White", "NH Black", "NH Asian", "NH Other/Multiple", "NH Asian", ~
+$ ageCat_18       [3m[38;5;246m<chr>[39m[23m NA, NA, "60+", "18-39", NA, "60+", "60+", NA, "40-59", "18-39", "60+", "40-59", "~
+$ activity        [3m[38;5;246m<dbl>[39m[23m NA, NA, 1, 1, NA, 1, 1, NA, 1, 1, 1, 0, 1, 1, 0, 1, NA, NA, 0, 0, 1, NA, NA, 1, 1~
+$ hi_caffeine     [3m[38;5;246m<dbl>[39m[23m NA, 0, 0, NA, 0, 0, NA, 0, 0, 0, 0, 0, 0, 0, 0, NA, 0, 0, 0, 0, 0, 0, NA, 0, 0, 0~
+$ BMI_cat         [3m[38;5;246m<chr>[39m[23m "underweight", "underweight", "obese", "normal", "underweight", "normal", "obese"~
+$ heavy_drink     [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, NA, NA, NA, NA, NA, 0, NA, 1, 0, NA, 0, 1, NA, NA, NA, 0, 0, NA, NA, N~
+$ heavy_drink2    [3m[38;5;246m<dbl>[39m[23m NA, NA, 0, 0, NA, 0, NA, NA, 0, 0, 1, 0, 0, 0, 1, 0, NA, NA, 0, 0, 0, NA, NA, 0, ~
+$ inAnalysis      [3m[38;5;246m<lgl>[39m[23m FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE,~
+ [1] "SEQN"            "RIAGENDR"        "RIDAGEYR"        "RIDRETH3"        "WTINT2YR"       
+ [6] "WTMEC2YR"        "SDMVPSU"         "SDMVSTRA"        "INDFMPIR"        "SLD012"         
+[11] "SLD013"          "SLQ120"          "day_sleep"       "ALQ111"          "ALQ121"         
+[16] "ALQ130"          "PAQ605"          "PAQ620"          "PAQ650"          "PAQ665"         
+[21] "BMXBMI"          "DR1TCAFF"        "DR2TCAFF"        "avg_mg_caffeine" "DPQ010"         
+[26] "DPQ020"          "DPQ030"          "DPQ040"          "DPQ050"          "DPQ060"         
+[31] "DPQ070"          "DPQ080"          "DPQ090"          "DPQ100"          "SMQ681"         
+[36] "depress_score"   "depress_cat"     "race1"           "raceEthCat"      "ageCat_18"      
+[41] "activity"        "hi_caffeine"     "BMI_cat"         "heavy_drink"     "heavy_drink2"   
+[46] "inAnalysis"     
+null device 
+          1 
+null device 
+          1 
+(Intercept)    RIAGENDR 
+  0.2048742   1.2206388 
+   (Intercept) ageCat_1840-59   ageCat_1860+ 
+     0.3183220      0.7924395      0.8044204 
+(Intercept)    INDFMPIR 
+  0.3767510   0.9118087 
+(Intercept)      SMQ681 
+  0.4012766   0.8151968 
+                (Intercept)          raceEthCatHispanic          raceEthCatNH Asian 
+                  0.3024167                   0.7857788                   0.4615732 
+         raceEthCatNH Black raceEthCatNH Other/Multiple 
+                  0.8091614                   1.2061075 
+(Intercept)    activity 
+  0.2791679   0.9971760 
+(Intercept) hi_caffeine 
+  0.2679387   1.4338962 
+       (Intercept)       BMI_catobese  BMI_catoverweight BMI_catunderweight 
+         0.2221463          1.5503832          1.0529336          1.2402763 
+ (Intercept) heavy_drink2 
+   0.2525171    1.2794627 
+  (Intercept) depress_cat.L depress_cat.Q depress_cat.C depress_cat^4 
+    0.4645206     2.2088022     0.5980783     1.2557422     0.9903052 
+
+Call:
+svyglm(formula = day_sleep ~ RIAGENDR, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -1.58536    0.15227 -10.412 5.65e-08 ***
+RIAGENDR     0.19937    0.08474   2.353   0.0338 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ ageCat_18, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)    -1.14469    0.05047 -22.680 7.73e-12 ***
+ageCat_1840-59 -0.23264    0.06337  -3.671  0.00282 ** 
+ageCat_1860+   -0.21763    0.07092  -3.069  0.00897 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ INDFMPIR, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -0.97617    0.08189 -11.920 1.02e-08 ***
+INDFMPIR    -0.09233    0.01919  -4.811 0.000277 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.026985)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ SMQ681, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -0.91310    0.12122  -7.532 2.74e-06 ***
+SMQ681      -0.20433    0.05779  -3.535  0.00329 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.0229)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ raceEthCat, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+                            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                 -1.19595    0.04884 -24.490 6.03e-11 ***
+raceEthCatHispanic          -0.24108    0.10810  -2.230   0.0475 *  
+raceEthCatNH Asian          -0.77311    0.09487  -8.149 5.48e-06 ***
+raceEthCatNH Black          -0.21176    0.07694  -2.752   0.0188 *  
+raceEthCatNH Other/Multiple  0.18740    0.13200   1.420   0.1834    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ activity, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -1.275942   0.059430 -21.470  4.1e-12 ***
+activity    -0.002828   0.068327  -0.041    0.968    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000872)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ hi_caffeine, design = NHANES_MEC, 
+    family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all_MEC, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) -1.31700    0.03985 -33.050 1.09e-14 ***
+hi_caffeine  0.36040    0.12757   2.825   0.0135 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.104844)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ BMI_cat, design = NHANES_MEC, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all_MEC, inAnalysis == 1)
+
+Coefficients:
+                   Estimate Std. Error t value Pr(>|t|)    
+(Intercept)        -1.50442    0.07922 -18.991 2.55e-10 ***
+BMI_catobese        0.43850    0.10153   4.319 0.000998 ***
+BMI_catoverweight   0.05158    0.13810   0.374 0.715285    
+BMI_catunderweight  0.21533    0.28243   0.762 0.460528    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.064164)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ heavy_drink2, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  -1.37628    0.06028 -22.830 1.78e-12 ***
+heavy_drink2  0.24644    0.05956   4.138  0.00101 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.022591)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ depress_cat, design = NHANES, family = quasibinomial(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)   -0.766749   0.059637 -12.857 5.71e-08 ***
+depress_cat.L  0.792450   0.105804   7.490 1.22e-05 ***
+depress_cat.Q -0.514034   0.093152  -5.518 0.000181 ***
+depress_cat.C  0.227727   0.075092   3.033 0.011395 *  
+depress_cat^4 -0.009742   0.075368  -0.129 0.899485    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.026629)
+
+Number of Fisher Scoring iterations: 6
+
+                2.5 %   97.5 %
+(Intercept) 0.1520115 0.276120
+RIAGENDR    1.0338484 1.441177
+                   2.5 %    97.5 %
+(Intercept)    0.2883403 0.3514213
+ageCat_1840-59 0.6998819 0.8972376
+ageCat_1860+   0.7000262 0.9243827
+                2.5 %    97.5 %
+(Intercept) 0.3208835 0.4423452
+INDFMPIR    0.8781503 0.9467571
+                2.5 %    97.5 %
+(Intercept) 0.3164159 0.5088964
+SMQ681      0.7278946 0.9129699
+                                2.5 %    97.5 %
+(Intercept)                 0.2748130 0.3327931
+raceEthCatHispanic          0.6357452 0.9712197
+raceEthCatNH Asian          0.3832524 0.5558994
+raceEthCatNH Black          0.6958975 0.9408600
+raceEthCatNH Other/Multiple 0.9311646 1.5622321
+                2.5 %    97.5 %
+(Intercept) 0.2484728 0.3136549
+activity    0.8721916 1.1400707
+                2.5 %    97.5 %
+(Intercept) 0.2478087 0.2897039
+hi_caffeine 1.1166917 1.8412050
+                       2.5 %    97.5 %
+(Intercept)        0.1901997 0.2594588
+BMI_catobese       1.2706349 1.8917221
+BMI_catoverweight  0.8032544 1.3802218
+BMI_catunderweight 0.7130374 2.1573695
+                 2.5 %   97.5 %
+(Intercept)  0.2243766 0.284187
+heavy_drink2 1.1384908 1.437890
+                  2.5 %    97.5 %
+(Intercept)   0.4132776 0.5221173
+depress_cat.L 1.7951322 2.7177982
+depress_cat.Q 0.4982724 0.7178756
+depress_cat.C 1.0838828 1.4548513
+depress_cat^4 0.8543099 1.1479492
+(Intercept)    RIAGENDR 
+   0.196535    1.196791 
+   (Intercept) ageCat_1840-59   ageCat_1860+ 
+     0.2882472      0.8212414      0.8681179 
+(Intercept)    INDFMPIR 
+  0.3271014   0.9203742 
+(Intercept)      SMQ681 
+  0.3509858   0.8464771 
+                (Intercept)          raceEthCatHispanic          raceEthCatNH Asian 
+                  0.3395669                   0.6706052                   0.4162442 
+         raceEthCatNH Black raceEthCatNH Other/Multiple 
+                  0.6797673                   0.9221490 
+(Intercept)    activity 
+  0.2672278   0.9535407 
+(Intercept) hi_caffeine 
+   0.261714    1.406810 
+       (Intercept)       BMI_catobese  BMI_catoverweight BMI_catunderweight 
+         0.2172012          1.4372141          1.0503686          1.0696224 
+ (Intercept) heavy_drink2 
+   0.2432354    1.2287319 
+  (Intercept) depress_cat.L depress_cat.Q depress_cat.C depress_cat^4 
+    0.4430082     2.4211563     0.6090507     1.2299172     0.9133011 
+
+Call:
+glm(formula = day_sleep ~ RIAGENDR, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8131  -0.8131  -0.7323   1.5922   1.7013  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.62691    0.07366 -22.087  < 2e-16 ***
+RIAGENDR     0.17964    0.04462   4.026 5.68e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6700.0  on 5855  degrees of freedom
+Residual deviance: 6683.6  on 5854  degrees of freedom
+AIC: 6687.6
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ ageCat_18, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8246  -0.7589  -0.7589   1.5773   1.6976  
+
+Coefficients:
+               Estimate Std. Error z value Pr(>|z|)    
+(Intercept)    -1.24394    0.03537  -35.17  < 2e-16 ***
+ageCat_1840-59 -0.19694    0.05579   -3.53 0.000416 ***
+ageCat_1860+   -0.14143    0.05142   -2.75 0.005956 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6700  on 5855  degrees of freedom
+Residual deviance: 6686  on 5853  degrees of freedom
+AIC: 6692
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ INDFMPIR, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8901  -0.8240  -0.7498   1.5176   1.7506  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.11749    0.04100 -27.257  < 2e-16 ***
+INDFMPIR    -0.08297    0.01507  -5.507 3.65e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5833.7  on 5020  degrees of freedom
+Residual deviance: 5802.5  on 5019  degrees of freedom
+  (835 observations deleted due to missingness)
+AIC: 5806.5
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ SMQ681, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8397  -0.7611  -0.7611   1.5580   1.6615  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.04701    0.09649 -10.851   <2e-16 ***
+SMQ681      -0.16667    0.05368  -3.105   0.0019 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5895.8  on 5131  degrees of freedom
+Residual deviance: 5886.6  on 5130  degrees of freedom
+  (724 observations deleted due to missingness)
+AIC: 5890.6
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ raceEthCat, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.9109  -0.8667  -0.7189   1.4697   1.9782  
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                 -1.08008    0.03094 -34.911  < 2e-16 ***
+raceEthCatHispanic          -0.39957    0.05914  -6.756 1.41e-11 ***
+raceEthCatNH Asian          -0.87648    0.09007  -9.731  < 2e-16 ***
+raceEthCatNH Black          -0.38600    0.05864  -6.583 4.61e-11 ***
+raceEthCatNH Other/Multiple -0.08105    0.09134  -0.887    0.375    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6700.0  on 5855  degrees of freedom
+Residual deviance: 6548.6  on 5851  degrees of freedom
+AIC: 6558.6
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ activity, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.7886  -0.7670  -0.7670   1.6246   1.6536  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.31965    0.03798 -34.746   <2e-16 ***
+activity    -0.04757    0.04672  -1.018    0.309    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6689.5  on 5848  degrees of freedom
+Residual deviance: 6688.5  on 5847  degrees of freedom
+  (7 observations deleted due to missingness)
+AIC: 6692.5
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ hi_caffeine, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.9583  -0.7790  -0.7790   1.4136   1.6374  
+
+Coefficients:
+            Estimate Std. Error z value Pr(>|z|)    
+(Intercept) -1.34050    0.02617 -51.223  < 2e-16 ***
+hi_caffeine  0.34132    0.09211   3.705 0.000211 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5036.4  on 4338  degrees of freedom
+Residual deviance: 5025.1  on 4337  degrees of freedom
+  (1517 observations deleted due to missingness)
+AIC: 5029.1
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ BMI_cat, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8651  -0.8651  -0.7197   1.5259   1.7475  
+
+Coefficients:
+                   Estimate Std. Error z value Pr(>|z|)    
+(Intercept)        -1.52693    0.05125 -29.792  < 2e-16 ***
+BMI_catobese        0.36271    0.06010   6.035 1.59e-09 ***
+BMI_catoverweight   0.04914    0.06772   0.726    0.468    
+BMI_catunderweight  0.06731    0.18975   0.355    0.723    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 6228.3  on 5433  degrees of freedom
+Residual deviance: 6174.6  on 5430  degrees of freedom
+  (422 observations deleted due to missingness)
+AIC: 6182.6
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ heavy_drink2, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-0.8427  -0.7466  -0.7466   1.5542   1.6815  
+
+Coefficients:
+             Estimate Std. Error z value Pr(>|z|)    
+(Intercept)  -1.41373    0.03009 -46.988  < 2e-16 ***
+heavy_drink2  0.20598    0.04795   4.296 1.74e-05 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5884.4  on 5119  degrees of freedom
+Residual deviance: 5866.5  on 5118  degrees of freedom
+  (736 observations deleted due to missingness)
+AIC: 5870.5
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ depress_cat, family = binomial(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4061  -0.6300  -0.6300   0.9895   1.8519  
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   -0.81417    0.03125 -26.052  < 2e-16 ***
+depress_cat.L  0.88425    0.08153  10.845  < 2e-16 ***
+depress_cat.Q -0.49585    0.07469  -6.639 3.16e-11 ***
+depress_cat.C  0.20695    0.06410   3.229  0.00124 ** 
+depress_cat^4 -0.09069    0.05656  -1.603  0.10883    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 5815.4  on 5067  degrees of freedom
+Residual deviance: 5335.0  on 5063  degrees of freedom
+  (788 observations deleted due to missingness)
+AIC: 5345
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ RIAGENDR + INDFMPIR + SMQ681 + ageCat_18 + 
+    +raceEthCat + activity + hi_caffeine + BMI_cat + heavy_drink2 + 
+    depress_cat, design = NHANES_MEC, family = quasipoisson(link = "log"))
+
+Survey design:
+subset(NHANES_all_MEC, inAnalysis == 1)
+
+Coefficients:
+                             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                 -1.082160   0.233512  -4.634 0.000324 ***
+RIAGENDR                     0.121471   0.078823   1.541 0.144130    
+INDFMPIR                    -0.052522   0.019994  -2.627 0.019049 *  
+SMQ681                       0.095709   0.068990   1.387 0.185622    
+ageCat_1840-59              -0.226165   0.095069  -2.379 0.031076 *  
+ageCat_1860+                -0.238507   0.081341  -2.932 0.010300 *  
+raceEthCatHispanic          -0.307914   0.099593  -3.092 0.007442 ** 
+raceEthCatNH Asian          -0.557554   0.173805  -3.208 0.005868 ** 
+raceEthCatNH Black          -0.238056   0.105131  -2.264 0.038800 *  
+raceEthCatNH Other/Multiple  0.064766   0.159042   0.407 0.689595    
+activity                     0.026327   0.057780   0.456 0.655168    
+hi_caffeine                  0.226425   0.095594   2.369 0.031709 *  
+BMI_catobese                 0.380563   0.106197   3.584 0.002716 ** 
+BMI_catoverweight            0.105170   0.160207   0.656 0.521471    
+BMI_catunderweight          -0.062413   0.362150  -0.172 0.865473    
+heavy_drink2                 0.058645   0.083379   0.703 0.492609    
+depress_cat.L                0.643917   0.102021   6.312 1.39e-05 ***
+depress_cat.Q               -0.426273   0.084199  -5.063 0.000140 ***
+depress_cat.C                0.239641   0.093666   2.558 0.021828 *  
+depress_cat^4               -0.005434   0.075550  -0.072 0.943615    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasipoisson family taken to be 0.8208122)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+svyglm(formula = day_sleep ~ RIAGENDR + ageCat_18 + INDFMPIR + 
+    SMQ681 + raceEthCat + activity + hi_caffeine + BMI_cat + 
+    heavy_drink2 + depress_cat, design = NHANES, family = quasipoisson(link = "log"))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+                             Estimate Std. Error t value Pr(>|t|)    
+(Intercept)                 -1.089417   0.237501  -4.587 0.000356 ***
+RIAGENDR                     0.125684   0.080332   1.565 0.138535    
+ageCat_1840-59              -0.226016   0.093995  -2.405 0.029561 *  
+ageCat_1860+                -0.252454   0.080819  -3.124 0.006972 ** 
+INDFMPIR                    -0.052001   0.019399  -2.681 0.017113 *  
+SMQ681                       0.093046   0.069257   1.343 0.199087    
+raceEthCatHispanic          -0.306654   0.098127  -3.125 0.006952 ** 
+raceEthCatNH Asian          -0.556917   0.176800  -3.150 0.006607 ** 
+raceEthCatNH Black          -0.239878   0.105846  -2.266 0.038658 *  
+raceEthCatNH Other/Multiple  0.065960   0.164823   0.400 0.694660    
+activity                     0.039479   0.059561   0.663 0.517487    
+hi_caffeine                  0.235958   0.094373   2.500 0.024492 *  
+BMI_catobese                 0.380365   0.107844   3.527 0.003050 ** 
+BMI_catoverweight            0.107206   0.162556   0.660 0.519570    
+BMI_catunderweight          -0.097781   0.377249  -0.259 0.799009    
+heavy_drink2                 0.052873   0.082232   0.643 0.529948    
+depress_cat.L                0.643541   0.105453   6.103 2.02e-05 ***
+depress_cat.Q               -0.422803   0.083392  -5.070 0.000138 ***
+depress_cat.C                0.250825   0.089710   2.796 0.013570 *  
+depress_cat^4                0.001431   0.076402   0.019 0.985299    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for quasipoisson family taken to be 0.7764147)
+
+Number of Fisher Scoring iterations: 6
+
+
+Call:
+glm(formula = day_sleep ~ RIAGENDR + ageCat_18 + INDFMPIR + SMQ681 + 
+    raceEthCat + activity + hi_caffeine + BMI_cat + heavy_drink2 + 
+    depress_cat, family = poisson(link = "log"), data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.3717  -0.6854  -0.5868   0.3796   1.7553  
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                 -0.80381    0.20016  -4.016 5.92e-05 ***
+RIAGENDR                     0.06662    0.06524   1.021  0.30718    
+ageCat_1840-59              -0.18448    0.08036  -2.296  0.02169 *  
+ageCat_1860+                -0.19778    0.08158  -2.424  0.01534 *  
+INDFMPIR                    -0.03071    0.02143  -1.433  0.15184    
+SMQ681                       0.10030    0.08124   1.235  0.21696    
+raceEthCatHispanic          -0.37725    0.08883  -4.247 2.17e-05 ***
+raceEthCatNH Asian          -0.64845    0.13840  -4.686 2.79e-06 ***
+raceEthCatNH Black          -0.34815    0.08526  -4.083 4.44e-05 ***
+raceEthCatNH Other/Multiple -0.13584    0.13158  -1.032  0.30192    
+activity                    -0.06755    0.07090  -0.953  0.34068    
+hi_caffeine                  0.11217    0.12508   0.897  0.36983    
+BMI_catobese                 0.23308    0.08521   2.735  0.00623 ** 
+BMI_catoverweight            0.08017    0.09485   0.845  0.39798    
+BMI_catunderweight          -0.26905    0.28795  -0.934  0.35012    
+heavy_drink2                 0.02428    0.07038   0.345  0.73014    
+depress_cat.L                0.72063    0.15763   4.572 4.84e-06 ***
+depress_cat.Q               -0.43440    0.14050  -3.092  0.00199 ** 
+depress_cat.C                0.21783    0.12248   1.779  0.07531 .  
+depress_cat^4               -0.05760    0.10252  -0.562  0.57419    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 2612.4  on 3678  degrees of freedom
+Residual deviance: 2320.8  on 3659  degrees of freedom
+  (2177 observations deleted due to missingness)
+AIC: 4384.8
+
+Number of Fisher Scoring iterations: 6
+
+
+z test of coefficients:
+
+                             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)                 -0.803810   0.155923 -5.1552 2.534e-07 ***
+RIAGENDR                     0.066625   0.052285  1.2743  0.202572    
+ageCat_1840-59              -0.184479   0.063186 -2.9196  0.003504 ** 
+ageCat_1860+                -0.197776   0.065378 -3.0251  0.002485 ** 
+INDFMPIR                    -0.030711   0.017555 -1.7494  0.080213 .  
+SMQ681                       0.100302   0.064105  1.5647  0.117662    
+raceEthCatHispanic          -0.377252   0.071291 -5.2917 1.212e-07 ***
+raceEthCatNH Asian          -0.648454   0.123021 -5.2711 1.356e-07 ***
+raceEthCatNH Black          -0.348150   0.069915 -4.9796 6.370e-07 ***
+raceEthCatNH Other/Multiple -0.135836   0.098084 -1.3849  0.166087    
+activity                    -0.067554   0.056518 -1.1952  0.231990    
+hi_caffeine                  0.112169   0.094040  1.1928  0.232956    
+BMI_catobese                 0.233082   0.070999  3.2829  0.001027 ** 
+BMI_catoverweight            0.080168   0.079409  1.0096  0.312710    
+BMI_catunderweight          -0.269051   0.228246 -1.1788  0.238488    
+heavy_drink2                 0.024277   0.056023  0.4333  0.664765    
+depress_cat.L                0.720634   0.097246  7.4104 1.259e-13 ***
+depress_cat.Q               -0.434399   0.086629 -5.0145 5.318e-07 ***
+depress_cat.C                0.217833   0.075467  2.8864  0.003896 ** 
+depress_cat^4               -0.057602   0.065414 -0.8806  0.378544    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+                (Intercept)                    RIAGENDR                    INDFMPIR 
+                  0.3388629                   1.1291569                   0.9488333 
+                     SMQ681              ageCat_1840-59                ageCat_1860+ 
+                  1.1004391                   0.7975861                   0.7878033 
+         raceEthCatHispanic          raceEthCatNH Asian          raceEthCatNH Black 
+                  0.7349785                   0.5726078                   0.7881582 
+raceEthCatNH Other/Multiple                    activity                 hi_caffeine 
+                  1.0669093                   1.0266769                   1.2541089 
+               BMI_catobese           BMI_catoverweight          BMI_catunderweight 
+                  1.4631086                   1.1108992                   0.9394944 
+               heavy_drink2               depress_cat.L               depress_cat.Q 
+                  1.0603987                   1.9039230                   0.6529379 
+              depress_cat.C               depress_cat^4 
+                  1.2707934                   0.9945811 
+                (Intercept)                    RIAGENDR              ageCat_1840-59 
+                  0.3364125                   1.1339234                   0.7977057 
+               ageCat_1860+                    INDFMPIR                      SMQ681 
+                  0.7768921                   0.9493281                   1.0975126 
+         raceEthCatHispanic          raceEthCatNH Asian          raceEthCatNH Black 
+                  0.7359049                   0.5729726                   0.7867238 
+raceEthCatNH Other/Multiple                    activity                 hi_caffeine 
+                  1.0681840                   1.0402691                   1.2661215 
+               BMI_catobese           BMI_catoverweight          BMI_catunderweight 
+                  1.4628178                   1.1131640                   0.9068478 
+               heavy_drink2               depress_cat.L               depress_cat.Q 
+                  1.0542955                   1.9032081                   0.6552077 
+              depress_cat.C               depress_cat^4 
+                  1.2850850                   1.0014325 
+                (Intercept)                    RIAGENDR              ageCat_1840-59 
+                  0.4476202                   1.0688942                   0.8315377 
+               ageCat_1860+                    INDFMPIR                      SMQ681 
+                  0.8205536                   0.9697560                   1.1055052 
+         raceEthCatHispanic          raceEthCatNH Asian          raceEthCatNH Black 
+                  0.6857430                   0.5228535                   0.7059933 
+raceEthCatNH Other/Multiple                    activity                 hi_caffeine 
+                  0.8729861                   0.9346777                   1.1187019 
+               BMI_catobese           BMI_catoverweight          BMI_catunderweight 
+                  1.2624850                   1.0834689                   0.7641043 
+               heavy_drink2               depress_cat.L               depress_cat.Q 
+                  1.0245741                   2.0557369                   0.6476537 
+              depress_cat.C               depress_cat^4 
+                  1.2433790                   0.9440252 
+                                2.5 %    97.5 %
+(Intercept)                 0.2144165 0.5355372
+RIAGENDR                    0.9675201 1.3177972
+INDFMPIR                    0.9123705 0.9867533
+SMQ681                      0.9612613 1.2597680
+ageCat_1840-59              0.6619946 0.9609500
+ageCat_1860+                0.6717070 0.9239654
+raceEthCatHispanic          0.6046451 0.8934057
+raceEthCatNH Asian          0.4072999 0.8050081
+raceEthCatNH Black          0.6413958 0.9685023
+raceEthCatNH Other/Multiple 0.7811792 1.4571502
+activity                    0.9167518 1.1497829
+hi_caffeine                 1.0398370 1.5125344
+BMI_catobese                1.1881769 1.8016566
+BMI_catoverweight           0.8115335 1.5206977
+BMI_catunderweight          0.4619892 1.9105421
+heavy_drink2                0.9005273 1.2486522
+depress_cat.L               1.5588674 2.3253568
+depress_cat.Q               0.5536067 0.7700918
+depress_cat.C               1.0576610 1.5268747
+depress_cat^4               0.8576931 1.1533165
+                                2.5 %    97.5 %
+(Intercept)                 0.2112081 0.5358381
+RIAGENDR                    0.9687355 1.3272791
+ageCat_1840-59              0.6634890 0.9590729
+ageCat_1860+                0.6630817 0.9102368
+INDFMPIR                    0.9139102 0.9861186
+SMQ681                      0.9582032 1.2570757
+raceEthCatHispanic          0.6071504 0.8919636
+raceEthCatNH Asian          0.4051736 0.8102642
+raceEthCatNH Black          0.6393309 0.9680971
+raceEthCatNH Other/Multiple 0.7733015 1.4755138
+activity                    0.9256518 1.1690787
+hi_caffeine                 1.0523139 1.5233702
+BMI_catobese                1.1841137 1.8071202
+BMI_catoverweight           0.8094518 1.5308314
+BMI_catunderweight          0.4329320 1.8995430
+heavy_drink2                0.8973598 1.2386769
+depress_cat.L               1.5478336 2.3401748
+depress_cat.Q               0.5564112 0.7715464
+depress_cat.C               1.0778801 1.5321216
+depress_cat^4               0.8621612 1.1632013
+Start:  AIC=2514.33
+day_sleep ~ 1
+
+               Df Deviance    AIC
++ depress_cat   4   1198.9 2450.9
++ raceEthCat    4   1256.2 2508.2
++ INDFMPIR      1   1262.8 2508.8
++ BMI_cat       3   1262.0 2512.0
++ hi_caffeine   1   1267.4 2513.4
+<none>              1270.3 2514.3
++ RIAGENDR      1   1269.2 2515.2
++ ageCat_18     2   1267.8 2515.8
++ heavy_drink2  1   1269.8 2515.8
++ SMQ681        1   1269.9 2515.9
++ activity      1   1270.2 2516.2
+
+Step:  AIC=2450.89
+day_sleep ~ depress_cat
+
+               Df Deviance    AIC
++ raceEthCat    4   1187.4 2447.4
+<none>              1198.9 2450.9
++ INDFMPIR      1   1197.1 2451.1
++ hi_caffeine   1   1197.8 2451.8
++ ageCat_18     2   1195.8 2451.8
++ RIAGENDR      1   1198.4 2452.4
++ BMI_cat       3   1194.5 2452.5
++ activity      1   1198.5 2452.5
++ SMQ681        1   1198.7 2452.7
++ heavy_drink2  1   1198.9 2452.9
+
+Step:  AIC=2447.4
+day_sleep ~ depress_cat + raceEthCat
+
+               Df Deviance    AIC
++ ageCat_18     2   1183.2 2447.2
++ INDFMPIR      1   1185.3 2447.3
+<none>              1187.4 2447.4
++ SMQ681        1   1186.8 2448.8
++ RIAGENDR      1   1187.1 2449.1
++ activity      1   1187.1 2449.1
++ hi_caffeine   1   1187.1 2449.1
++ heavy_drink2  1   1187.4 2449.4
++ BMI_cat       3   1183.4 2449.4
+
+Step:  AIC=2447.2
+day_sleep ~ depress_cat + raceEthCat + ageCat_18
+
+               Df Deviance    AIC
+<none>              1183.2 2447.2
++ INDFMPIR      1   1181.7 2447.7
++ SMQ681        1   1182.0 2448.0
++ BMI_cat       3   1178.4 2448.4
++ hi_caffeine   1   1182.7 2448.7
++ heavy_drink2  1   1183.0 2448.9
++ RIAGENDR      1   1183.0 2449.0
++ activity      1   1183.2 2449.2
+
+z test of coefficients:
+
+                             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)                 -0.482284   0.063935 -7.5433 4.581e-14 ***
+depress_cat.L                0.576384   0.129384  4.4548 8.396e-06 ***
+depress_cat.Q               -0.392328   0.115405 -3.3996 0.0006749 ***
+depress_cat.C                0.042799   0.092111  0.4646 0.6421856    
+depress_cat^4               -0.041453   0.074945 -0.5531 0.5801898    
+raceEthCatHispanic          -0.277537   0.084456 -3.2862 0.0010156 ** 
+raceEthCatNH Asian          -0.448282   0.149246 -3.0036 0.0026677 ** 
+raceEthCatNH Black          -0.232862   0.083771 -2.7798 0.0054400 ** 
+raceEthCatNH Other/Multiple -0.150954   0.115582 -1.3060 0.1915424    
+ageCat_1840-59              -0.115274   0.071351 -1.6156 0.1061843    
+ageCat_1860+                -0.204843   0.079876 -2.5645 0.0103322 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+Call:
+glm(formula = day_sleep ~ depress_cat + raceEthCat + ageCat_18, 
+    family = poisson(link = "log"), data = analytic_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.2781  -0.7799  -0.6942   0.6298   1.3459  
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                 -0.48228    0.09852  -4.895 9.81e-07 ***
+depress_cat.L                0.57638    0.20265   2.844  0.00445 ** 
+depress_cat.Q               -0.39233    0.18092  -2.169  0.03012 *  
+depress_cat.C                0.04280    0.14962   0.286  0.77484    
+depress_cat^4               -0.04145    0.12182  -0.340  0.73365    
+raceEthCatHispanic          -0.27754    0.10892  -2.548  0.01083 *  
+raceEthCatNH Asian          -0.44828    0.17580  -2.550  0.01077 *  
+raceEthCatNH Black          -0.23286    0.10737  -2.169  0.03009 *  
+raceEthCatNH Other/Multiple -0.15095    0.16024  -0.942  0.34617    
+ageCat_1840-59              -0.11527    0.09378  -1.229  0.21900    
+ageCat_1860+                -0.20484    0.10283  -1.992  0.04637 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 1270.3  on 1726  degrees of freedom
+Residual deviance: 1183.2  on 1716  degrees of freedom
+AIC: 2447.2
+
+Number of Fisher Scoring iterations: 5
+
+                (Intercept)               depress_cat.L               depress_cat.Q 
+                  0.6173715                   1.7795910                   0.6754827 
+              depress_cat.C               depress_cat^4          raceEthCatHispanic 
+                  1.0437281                   0.9593946                   0.7576473 
+         raceEthCatNH Asian          raceEthCatNH Black raceEthCatNH Other/Multiple 
+                  0.6387248                   0.7922631                   0.8598874 
+             ageCat_1840-59                ageCat_1860+ 
+                  0.8911220                   0.8147754 
+                GVIF Df GVIF^(1/(2*Df))
+depress_cat 1.021293  4        1.002637
+raceEthCat  1.044998  4        1.005517
+ageCat_18   1.042034  2        1.010347
+
+Call:
+glm(formula = day_sleep ~ depress_cat + ageCat_18 + SMQ681 + 
+    activity + raceEthCat + hi_caffeine + heavy_drink2, family = poisson(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.3059  -0.6649  -0.5739   0.3749   1.7463  
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                 -0.60500    0.15997  -3.782 0.000156 ***
+depress_cat.L                0.83543    0.13796   6.056 1.40e-09 ***
+depress_cat.Q               -0.40609    0.12492  -3.251 0.001151 ** 
+depress_cat.C                0.29800    0.11183   2.665 0.007706 ** 
+depress_cat^4               -0.03835    0.09589  -0.400 0.689213    
+ageCat_1840-59              -0.18828    0.07594  -2.479 0.013167 *  
+ageCat_1860+                -0.21188    0.07645  -2.772 0.005579 ** 
+SMQ681                       0.10213    0.07482   1.365 0.172250    
+activity                    -0.09067    0.06641  -1.365 0.172142    
+raceEthCatHispanic          -0.36168    0.08289  -4.363 1.28e-05 ***
+raceEthCatNH Asian          -0.78766    0.13358  -5.897 3.71e-09 ***
+raceEthCatNH Black          -0.34672    0.08010  -4.328 1.50e-05 ***
+raceEthCatNH Other/Multiple -0.13766    0.12599  -1.093 0.274537    
+hi_caffeine                  0.11937    0.12200   0.978 0.327873    
+heavy_drink2                 0.03806    0.06676   0.570 0.568567    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 2935.0  on 4164  degrees of freedom
+Residual deviance: 2599.7  on 4150  degrees of freedom
+  (1691 observations deleted due to missingness)
+AIC: 4847.7
+
+Number of Fisher Scoring iterations: 6
+
+
+z test of coefficients:
+
+                             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)                 -0.604997   0.121445 -4.9817 6.304e-07 ***
+depress_cat.L                0.835431   0.081969 10.1920 < 2.2e-16 ***
+depress_cat.Q               -0.406091   0.075380 -5.3872 7.156e-08 ***
+depress_cat.C                0.297997   0.071108  4.1908 2.780e-05 ***
+depress_cat^4               -0.038350   0.063182 -0.6070 0.5438610    
+ageCat_1840-59              -0.188282   0.060499 -3.1122 0.0018573 ** 
+ageCat_1860+                -0.211885   0.061448 -3.4482 0.0005643 ***
+SMQ681                       0.102129   0.059907  1.7048 0.0882301 .  
+activity                    -0.090669   0.052991 -1.7110 0.0870746 .  
+raceEthCatHispanic          -0.361676   0.067043 -5.3947 6.863e-08 ***
+raceEthCatNH Asian          -0.787660   0.119233 -6.6061 3.946e-11 ***
+raceEthCatNH Black          -0.346716   0.065189 -5.3187 1.045e-07 ***
+raceEthCatNH Other/Multiple -0.137664   0.096014 -1.4338 0.1516323    
+hi_caffeine                  0.119369   0.092434  1.2914 0.1965662    
+heavy_drink2                 0.038062   0.053537  0.7110 0.4771127    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+     res.deviance   df p
+[1,]     2599.738 4150 1
+     res.deviance   df p
+[1,]     1183.199 1716 1
+     res.deviance   df p
+[1,]     2320.764 3659 1
+[1] 2447.199
+[1] 4384.764
+[1] 4847.738
+[1] 5802.821
+     mod_final_behav$fitted.values pearson_res_fin
+5                       0.09910205        2.861767
+10                      0.09679036        2.903170
+93                      0.08948051        3.043863
+270                     0.09679036        2.903170
+623                     0.10850747        2.706374
+912                     0.08948051        3.043863
+1218                    0.11963339        2.545290
+1259                    0.09679036        2.903170
+1371                    0.08739325        3.087058
+1438                    0.08948051        3.043863
+1456                    0.09910205        2.861767
+1575                    0.10597638        2.746278
+1764                    0.08739325        3.087058
+2296                    0.11220921        2.650308
+2674                    0.11963339        2.545290
+2732                    0.11963339        2.545290
+2798                    0.10597638        2.746278
+3056                    0.09910205        2.861767
+3257                    0.11271714        2.642817
+3467                    0.09679036        2.903170
+3534                    0.09910205        2.861767
+3599                    0.10597638        2.746278
+3712                    0.09910205        2.861767
+3771                    0.10850747        2.706374
+3931                    0.11963339        2.545290
+3942                    0.10597638        2.746278
+4147                    0.11963339        2.545290
+4187                    0.09910205        2.861767
+4257                    0.10294683        2.795836
+4346                    0.10054545        2.836599
+4475                    0.11963339        2.545290
+4570                    0.11271714        2.642817
+4606                    0.10850747        2.706374
+4622                    0.09910205        2.861767
+4887                    0.09910205        2.861767
+4979                    0.11827016        2.563881
+5215                    0.09910205        2.861767
+5454                    0.11963339        2.545290
+5496                    0.11963339        2.545290
+5699                    0.08948051        3.043863
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+0.001112 0.001548 0.001979 0.003601 0.004278 0.048211 
+     mod_final_behav$fitted.values pearson_res_fin         lev
+27                       0.5299878    0.6456187683 0.010388046
+34                       0.5505493    0.6057367774 0.011440973
+35                       0.6055690    0.5068613254 0.010031959
+37                       0.4916200   -0.7011561687 0.013213701
+55                       0.5430802    0.6200232721 0.008410304
+70                       0.5869757   -0.7661433964 0.010758843
+76                       0.6527989   -0.8079596999 0.021373841
+80                       0.4490064   -0.6700793883 0.011716992
+96                       0.6935643    0.3679560274 0.009403532
+98                       0.4490064   -0.6700793883 0.011716992
+103                      0.4828066    0.7443315414 0.009843870
+130                      0.5914433    0.5312461290 0.009100332
+132                      0.6673361    0.4072240097 0.031128302
+135                      0.7390926   -0.8597049336 0.032394729
+144                      0.6935643   -0.8328051045 0.009403532
+150                      0.5828314   -0.7634339464 0.011240996
+154                      0.5610643    0.5859959630 0.010873339
+170                      0.6693518   -0.8181392292 0.015805970
+173                      0.6363136    0.4559229416 0.008944054
+211                      0.8410426   -0.9170837333 0.012900498
+219                      0.6363136    0.4559229416 0.008944054
+231                      0.5217855   -0.7223471842 0.013132535
+232                      0.4622199    0.7910071278 0.011527723
+237                      0.7861035    0.2412480986 0.036184413
+252                      0.5147838    0.6762742802 0.024589078
+279                      0.6055690   -0.7781831705 0.010031959
+285                      0.4285176   -0.6546125192 0.011083669
+310                      0.4622199   -0.6798675669 0.011527723
+319                      0.8332052    0.1827286551 0.020121234
+379                      0.5263628   -0.7255086604 0.014943930
+393                      0.4340642    0.8589940796 0.012199715
+407                      0.7394531   -0.8599146155 0.009126189
+458                      0.7681411    0.2645473139 0.009761792
+472                      0.9381499    0.0638563356 0.045096062
+479                      0.5168404   -0.7189161074 0.009256855
+499                      0.4650316    0.7844890782 0.008797321
+512                      0.4782277    0.7545077046 0.012797385
+514                      0.7542160    0.2830126263 0.027769071
+575                      0.4221547   -0.6497343440 0.010832354
+579                      0.5475272    0.6114902945 0.026394915
+618                      0.5430802   -0.7369397546 0.008410304
+666                      0.4967811   -0.7048269723 0.012529484
+697                      0.5639150    0.5807166206 0.009137141
+730                      0.4622199   -0.6798675669 0.011527723
+807                      0.5237019   -0.7236724938 0.016230939
+818                      0.6706839    0.4021184462 0.009453458
+844                      0.7466356    0.2932183803 0.041765338
+847                      0.6636248   -0.8146317106 0.014927028
+878                      0.7782090    0.2514176350 0.017608354
+890                      0.5603275   -0.7485502775 0.014389414
+920                      0.4348375   -0.6594221187 0.010335162
+946                      0.6296163   -0.7934836294 0.015518110
+965                      0.6290628   -0.7931347785 0.010496476
+998                      0.6809912    0.3865733589 0.023374217
+1003                     0.5708207    0.5680531558 0.018699976
+1007                     0.6935643   -0.8328051045 0.009403532
+1026                     0.6381458    0.4529743566 0.014304233
+1035                     0.4647751    0.7850817707 0.009124744
+1055                     0.4970148    0.7134615723 0.010243175
+1064                     0.5869757   -0.7661433964 0.010758843
+1070                     0.5636401   -0.7507596639 0.026950667
+1086                     0.5611338   -0.7490886518 0.009176442
+1115                     0.6363136   -0.7976926776 0.008944054
+1172                     0.6935643    0.3679560274 0.009403532
+1195                     0.4196513    0.8958693307 0.009314110
+1203                     0.4196513   -0.6478050229 0.009314110
+1219                     0.5430802   -0.7369397546 0.008410304
+1245                     0.5707958   -0.7555103132 0.014007730
+1253                     0.5072076   -0.7121850659 0.017154557
+1258                     0.6232007   -0.7894306373 0.013803072
+1271                     0.4594790   -0.6778487682 0.010888592
+1273                     0.4622199    0.7910071278 0.011527723
+1288                     0.5530784    0.6009495958 0.008606682
+1303                     0.7394531    0.3029915405 0.009126189
+1337                     0.5072076    0.6919443492 0.017154557
+1345                     0.7621720   -0.8730246441 0.026110659
+1355                     0.4803924    0.7496825069 0.012875871
+1373                     0.8406325   -0.9168601113 0.039674692
+1378                     0.8096320    0.2115680742 0.011629485
+1436                     0.7424833    0.2988559856 0.025902867
+1453                     0.6935643    0.3679560274 0.009403532
+1471                     0.7557170   -0.8693198349 0.018602997
+1474                     0.5353735   -0.7316922332 0.015522139
+1493                     0.7677665    0.2650393102 0.035142261
+1510                     0.4647751    0.7850817707 0.009124744
+1518                     0.6751646   -0.8216840235 0.023287014
+1531                     0.4359322   -0.6602516128 0.009262185
+1550                     0.7681411    0.2645473139 0.009761792
+1553                     0.6232007    0.4773050996 0.013803072
+1556                     0.5707958    0.5680983557 0.014007730
+1630                     0.6055690    0.5068613254 0.010031959
+1643                     0.3363831    1.1441958751 0.008423838
+1665                     0.6171970    0.4872630725 0.013366956
+1675                     0.7026548    0.3547234163 0.015760535
+1717                     0.6290628   -0.7931347785 0.010496476
+1720                     0.7681411    0.2645473139 0.009761792
+1723                     0.6043663    0.5089126141 0.014454642
+1747                     0.6061019    0.5059540878 0.013604913
+1748                     0.4557739   -0.6751103131 0.012534466
+1770                     0.5869757   -0.7661433964 0.010758843
+1773                     0.6055690    0.5068613254 0.010031959
+1784                     0.5236146   -0.7236121589 0.014448159
+1811                     0.5869757    0.5390952896 0.010758843
+1813                     0.5006456   -0.7075631732 0.012719857
+1828                     0.6706839   -0.8189529392 0.009453458
+1871                     0.6764126   -0.8224430981 0.016470070
+1889                     0.6764126   -0.8224430981 0.016470070
+1893                     0.3779571    1.0118103480 0.009414162
+1907                     0.5262459   -0.7254280685 0.010513328
+1915                     0.3959567   -0.6292509379 0.011670767
+1931                     0.6935643    0.3679560274 0.009403532
+1941                     0.7147537    0.3373974955 0.024738324
+1943                     0.7681411    0.2645473139 0.009761792
+1965                     0.5420287   -0.7362259886 0.013129056
+1967                     0.4221547   -0.6497343440 0.010832354
+2024                     0.5426458    0.6208610793 0.010287122
+2038                     0.6781249    0.3908701154 0.021977628
+2059                     0.4993885    0.7084049341 0.013830817
+2098                     0.6706839   -0.8189529392 0.009453458
+2105                     0.4221547    0.8893562230 0.010832354
+2114                     0.6636248    0.4129168699 0.014927028
+2147                     0.6676617   -0.8171056599 0.009945503
+2164                     0.6676617    0.4067262741 0.009945503
+2202                     0.5641203    0.5803376944 0.018836766
+2237                     0.5270786   -0.7260018161 0.025596706
+2241                     0.5610643    0.5859959630 0.010873339
+2253                     0.7306706    0.3150815732 0.034495932
+2256                     0.5426458   -0.7366449686 0.010287122
+2260                     0.5828314    0.5464370709 0.011240996
+2293                     0.7002642    0.3581851666 0.017644698
+2294                     0.5426458    0.6208610793 0.010287122
+2298                     0.5610643    0.5859959630 0.010873339
+2319                     0.4647751   -0.6817441544 0.009124744
+2350                     0.7394531    0.3029915405 0.009126189
+2360                     0.5894204    0.5347918279 0.019864988
+2379                     0.4801522    0.7502166298 0.012972284
+2383                     0.4970148   -0.7049927437 0.010243175
+2416                     0.8520661    0.1602622401 0.021252901
+2441                     0.6205777    0.4816424419 0.014897572
+2464                     0.8092372    0.2120585420 0.036129463
+2491                     0.5168404   -0.7189161074 0.009256855
+2494                     0.6243110   -0.7901335417 0.012464284
+2552                     0.4636994    0.7875715106 0.017742129
+2568                     0.4236346   -0.6508721592 0.011497877
+2582                     0.5724145    0.5651550461 0.009237016
+2609                     0.5914433   -0.7690535093 0.009100332
+2610                     0.5639150    0.5807166206 0.009137141
+2618                     0.6061019   -0.7785254451 0.013604913
+2624                     0.7477629    0.2916936835 0.026100255
+2641                     0.5213193   -0.7220244377 0.012521249
+2648                     0.4196513    0.8958693307 0.009314110
+2705                     0.5430520   -0.7369206122 0.018220777
+2712                     0.4236346   -0.6508721592 0.011497877
+2716                     0.5475272   -0.7399508387 0.026394915
+2725                     0.5610643   -0.7490422371 0.010873339
+2752                     0.3683080   -0.6068838384 0.009839984
+2792                     0.5262459    0.6530683580 0.010513328
+2816                     0.5610643   -0.7490422371 0.010873339
+2839                     0.3494334    1.1005493067 0.009421814
+2845                     0.6703977    0.4025538914 0.022721829
+2874                     0.6558636    0.4249362483 0.021343199
+2876                     0.8526890   -0.9234116256 0.047776150
+2887                     0.6446537   -0.8029033077 0.015884464
+2899                     0.6935643    0.3679560274 0.009403532
+2930                     0.4054136    0.9338257309 0.011141438
+2960                     0.6028000   -0.7764019379 0.013847962
+3000                     0.5857928    0.5411849074 0.009634140
+3026                     0.7677665    0.2650393102 0.035142261
+3040                     0.8248309    0.1928745680 0.039106765
+3052                     0.5420287   -0.7362259886 0.013129056
+3070                     0.5217855    0.6620286699 0.013132535
+3119                     0.5430802    0.6200232721 0.008410304
+3124                     0.5771018    0.5566851665 0.028570526
+3155                     0.5636984   -0.7507984832 0.010468892
+3180                     0.7782090    0.2514176350 0.017608354
+3186                     0.5299878    0.6456187683 0.010388046
+3187                     0.4098624   -0.6402049609 0.009538609
+3231                     0.7814983    0.2471671674 0.017984439
+3241                     0.5225428    0.6605011462 0.024518138
+3255                     0.4359322   -0.6602516128 0.009262185
+3277                     0.4970148    0.7134615723 0.010243175
+3280                     0.5213193   -0.7220244377 0.012521249
+3287                     0.4828066    0.7443315414 0.009843870
+3292                     0.6832744    0.3831647490 0.032462105
+3328                     0.5684885    0.5723101769 0.014540281
+3359                     0.6706839    0.4021184462 0.009453458
+3375                     0.7491451    0.2898275154 0.017111714
+3428                     0.6902115    0.3728844159 0.015340219
+3431                     0.5153788   -0.7178988959 0.014134214
+3488                     0.6247783    0.4747062478 0.022316548
+3493                     0.4285176    0.8730087387 0.011083669
+3514                     0.4830790    0.7437296550 0.023734492
+3556                     0.5415445    0.6229887055 0.014449816
+3560                     0.4138276   -0.6432943530 0.011015727
+3594                     0.5368918    0.6320320827 0.009428603
+3618                     0.4773050   -0.6908726031 0.011148854
+3622                     0.6086637   -0.7801690206 0.013910297
+3665                     0.4828066   -0.6948428332 0.009843870
+3680                     0.5991953   -0.7740770647 0.014906428
+3685                     0.5358523    0.6340648970 0.014329178
+3702                     0.4509042    0.8177225212 0.012323522
+3766                     0.7071624    0.3482308881 0.035492061
+3768                     0.7557170    0.2810047750 0.018602997
+3778                     0.6009947    0.5146870878 0.011206226
+3783                     0.5802871    0.5509737218 0.012292797
+3795                     0.4221547    0.8893562230 0.010832354
+3814                     0.4400699   -0.6633776795 0.012597373
+3829                     0.7169890    0.3342312530 0.017126048
+3849                     0.6363136   -0.7976926776 0.008944054
+3899                     0.5639150   -0.7509427741 0.009137141
+3900                     0.4185976    0.8986249925 0.009703359
+3929                     0.6009947    0.5146870878 0.011206226
+3944                     0.4967811    0.7139609561 0.012529484
+3954                     0.4387521    0.8473155559 0.011621089
+3959                     0.6009947    0.5146870878 0.011206226
+3979                     0.6935643    0.3679560274 0.009403532
+3993                     0.4316910   -0.6570319380 0.025853842
+4022                     0.5018206   -0.7083929628 0.024179493
+4037                     0.3363831   -0.5799854145 0.008423838
+4038                     0.8096320   -0.8997955284 0.011629485
+4043                     0.7406085    0.3014125270 0.019112671
+4052                     0.6693518    0.4041466168 0.015805970
+4056                     0.4359322    0.8543224989 0.009262185
+4078                     0.6703977    0.4025538914 0.022721829
+4081                     0.7693413    0.2629725043 0.018845635
+4111                     0.6935643   -0.8328051045 0.009403532
+4136                     0.6473785    0.4382577948 0.014310353
+4153                     0.5420287    0.6220526046 0.013129056
+4173                     0.7767732   -0.8813473726 0.029640113
+4177                     0.4797441   -0.6926356449 0.016257851
+4178                     0.5869757    0.5390952896 0.010758843
+4188                     0.7026548    0.3547234163 0.015760535
+4200                     0.3155079   -0.5617009004 0.009232692
+4208                     0.5991953   -0.7740770647 0.014906428
+4216                     0.4828066   -0.6948428332 0.009843870
+4223                     0.5544784    0.5983101787 0.013826935
+4231                     0.4438899    0.8346859628 0.012435116
+4250                     0.4385327    0.8478587324 0.011896748
+4263                     0.4196513    0.8958693307 0.009314110
+4267                     0.6363136    0.4559229416 0.008944054
+4271                     0.5721354    0.5656619021 0.026954597
+4297                     0.4916200   -0.7011561687 0.013213701
+4302                     0.6097481   -0.7808636785 0.012935218
+4304                     0.4901149    0.7283218524 0.024419200
+4315                     0.5262459   -0.7254280685 0.010513328
+4328                     0.6232007    0.4773050996 0.013803072
+4401                     0.5065921   -0.7117528187 0.011031156
+4407                     0.7681411    0.2645473139 0.009761792
+4419                     0.4925737   -0.7018359349 0.008675260
+4421                     0.6097481    0.4997695837 0.012935218
+4424                     0.7394531   -0.8599146155 0.009126189
+4459                     0.5934707    0.5277062044 0.015294763
+4467                     0.6313690   -0.7945872987 0.020940703
+4478                     0.5639150    0.5807166206 0.009137141
+4479                     0.6061019    0.5059540878 0.013604913
+4485                     0.5844284   -0.7644791991 0.014759715
+4519                     0.8096320   -0.8997955284 0.011629485
+4526                     0.6709227    0.4017554021 0.032367792
+4530                     0.7310270    0.3145878269 0.012184710
+4534                     1.0002214   -0.0002214154 0.048211340
+4537                     0.5610643    0.5859959630 0.010873339
+4557                     0.4707058   -0.6860800410 0.012780973
+4585                     0.4115241    0.9173415393 0.011086923
+4591                     0.7491451   -0.8655316872 0.017111714
+4605                     0.6935643    0.3679560274 0.009403532
+4614                     0.6097481    0.4997695837 0.012935218
+4616                     0.4647751    0.7850817707 0.009124744
+4641                     0.4894046    0.7298655231 0.012451163
+4683                     0.5610643    0.5859959630 0.010873339
+4684                     0.6764126   -0.8224430981 0.016470070
+4704                     0.4594790   -0.6778487682 0.010888592
+4729                     0.6009947   -0.7752385108 0.011206226
+4746                     0.6794745    0.3888445110 0.016950562
+4773                     0.6061019    0.5059540878 0.013604913
+4791                     0.5941464    0.5265294886 0.012735411
+4841                     0.6446537    0.4425766776 0.015884464
+4855                     0.5426458   -0.7366449686 0.010287122
+4859                     0.5165883    0.6725813372 0.025388665
+4863                     0.5869757   -0.7661433964 0.010758843
+4872                     0.4337525   -0.6585988546 0.012013438
+4886                     0.6243110    0.4754753045 0.012464284
+4892                     0.6893709   -0.8302836221 0.017442315
+4925                     0.9489634    0.0523910013 0.042940603
+4948                     0.4098624   -0.6402049609 0.009538609
+4980                     0.4943693   -0.7031140156 0.024607009
+5027                     0.7519447    0.2860589673 0.041517863
+5042                     0.6804818   -0.8249132344 0.013405831
+5059                     0.6009947    0.5146870878 0.011206226
+5069                     0.4773050    0.7565722594 0.011148854
+5085                     0.6676617   -0.8171056599 0.009945503
+5127                     0.6009947   -0.7752385108 0.011206226
+5141                     0.4647751   -0.6817441544 0.009124744
+5150                     0.7097828   -0.8424860975 0.032778465
+5166                     0.6527989    0.4297257937 0.021373841
+5180                     0.4115241    0.9173415393 0.011086923
+5228                     0.5603275   -0.7485502775 0.014389414
+5244                     0.5501983    0.6064031567 0.014276880
+5300                     0.6363136    0.4559229416 0.008944054
+5304                     0.7394531    0.3029915405 0.009126189
+5396                     0.5299878    0.6456187683 0.010388046
+5401                     0.6367003   -0.7979350359 0.037944079
+5424                     0.7026548    0.3547234163 0.015760535
+5425                     0.7681411    0.2645473139 0.009761792
+5428                     0.6709227    0.4017554021 0.032367792
+5434                     0.4098624    0.9217948065 0.009538609
+5464                     0.8202438    0.1984780394 0.020136504
+5503                     0.6594211    0.4194076106 0.037585737
+5517                     0.6443534   -0.8027162552 0.015055234
+5521                     0.3839995    0.9940670398 0.019731122
+5524                     0.6373079    0.4543217359 0.016512063
+5526                     0.5857928    0.5411849074 0.009634140
+5531                     0.6205777   -0.7877675504 0.014897572
+5532                     0.6055690   -0.7781831705 0.010031959
+5541                     0.5724145    0.5651550461 0.009237016
+5557                     0.7681411   -0.8764365692 0.009761792
+5577                     0.6446537    0.4425766776 0.015884464
+5594                     0.5894204    0.5347918279 0.019864988
+5598                     0.5065921   -0.7117528187 0.011031156
+5606                     0.5828314    0.5464370709 0.011240996
+5641                     0.5426458   -0.7366449686 0.010287122
+5643                     0.4387521    0.8473155559 0.011621089
+5660                     0.6664298   -0.8163515115 0.016061354
+5702                     0.5299878    0.6456187683 0.010388046
+5713                     0.2823057   -0.5313244839 0.010487153
+5716                     0.4451424    0.8316337326 0.012662511
+5728                     0.7406085    0.3014125270 0.019112671
+5735                     0.6902115    0.3728844159 0.015340219
+5741                     0.5505493    0.6057367774 0.011440973
+5764                     0.3747045   -0.6121311019 0.009465712
+5772                     0.4490064   -0.6700793883 0.011716992
+5783                     0.5286280   -0.7270680868 0.012026350
+5787                     0.7681411    0.2645473139 0.009761792
+5791                     0.7997731   -0.8943003195 0.043350594
+ [ reached 'max' / getOption("max.print") -- omitted 3 rows ]
+          dfits
+2876 -0.3788205
+5791 -0.3478482
+1373 -0.3398676
+5401 -0.2887166
+135  -0.2857840
+5150 -0.2818225
+4173 -0.2794537
+1345 -0.2588681
+1518 -0.2294205
+1070 -0.2263443
+2716 -0.2206460
+1471 -0.2159121
+76   -0.2156987
+2237 -0.2130116
+4467 -0.2098737
+4591 -0.2058614
+5856 -0.2028300
+4980 -0.2020609
+4022 -0.2017139
+4892 -0.1994388
+3993 -0.1937853
+1871 -0.1917798
+1889 -0.1917798
+4684 -0.1917798
+5830 -0.1901285
+211  -0.1885887
+5660 -0.1879037
+170  -0.1867638
+2887 -0.1837532
+2705 -0.1810526
+847  -0.1805569
+946  -0.1794231
+5517 -0.1787003
+4038 -0.1754539
+4519 -0.1754539
+5531 -0.1744222
+5042 -0.1730031
+3680 -0.1714419
+4208 -0.1714419
+1253 -0.1695921
+4485 -0.1684549
+1258 -0.1680605
+807  -0.1674679
+3622 -0.1667499
+2960 -0.1655617
+1474 -0.1654669
+2618 -0.1645108
+890  -0.1627999
+5228 -0.1627999
+1245 -0.1620576
+379  -0.1608886
+4302 -0.1607836
+4177 -0.1604200
+2494 -0.1596280
+1784 -0.1577042
+5557 -0.1562778
+
+Call:
+glm(formula = day_sleep ~ depress_cat + ageCat_18 + SMQ681 + 
+    activity + raceEthCat + hi_caffeine + heavy_drink2, family = poisson(link = "log"), 
+    data = unweighted_data)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.3059  -0.6649  -0.5739   0.3749   1.7463  
+
+Coefficients:
+                            Estimate Std. Error z value Pr(>|z|)    
+(Intercept)                 -0.60500    0.15997  -3.782 0.000156 ***
+depress_cat.L                0.83543    0.13796   6.056 1.40e-09 ***
+depress_cat.Q               -0.40609    0.12492  -3.251 0.001151 ** 
+depress_cat.C                0.29800    0.11183   2.665 0.007706 ** 
+depress_cat^4               -0.03835    0.09589  -0.400 0.689213    
+ageCat_1840-59              -0.18828    0.07594  -2.479 0.013167 *  
+ageCat_1860+                -0.21188    0.07645  -2.772 0.005579 ** 
+SMQ681                       0.10213    0.07482   1.365 0.172250    
+activity                    -0.09067    0.06641  -1.365 0.172142    
+raceEthCatHispanic          -0.36168    0.08289  -4.363 1.28e-05 ***
+raceEthCatNH Asian          -0.78766    0.13358  -5.897 3.71e-09 ***
+raceEthCatNH Black          -0.34672    0.08010  -4.328 1.50e-05 ***
+raceEthCatNH Other/Multiple -0.13766    0.12599  -1.093 0.274537    
+hi_caffeine                  0.11937    0.12200   0.978 0.327873    
+heavy_drink2                 0.03806    0.06676   0.570 0.568567    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for poisson family taken to be 1)
+
+    Null deviance: 2935.0  on 4164  degrees of freedom
+Residual deviance: 2599.7  on 4150  degrees of freedom
+  (1691 observations deleted due to missingness)
+AIC: 4847.7
+
+Number of Fisher Scoring iterations: 6
+
+
+z test of coefficients:
+
+                             Estimate Std. Error z value  Pr(>|z|)    
+(Intercept)                 -0.604997   0.121445 -4.9817 6.304e-07 ***
+depress_cat.L                0.835431   0.081969 10.1920 < 2.2e-16 ***
+depress_cat.Q               -0.406091   0.075380 -5.3872 7.156e-08 ***
+depress_cat.C                0.297997   0.071108  4.1908 2.780e-05 ***
+depress_cat^4               -0.038350   0.063182 -0.6070 0.5438610    
+ageCat_1840-59              -0.188282   0.060499 -3.1122 0.0018573 ** 
+ageCat_1860+                -0.211885   0.061448 -3.4482 0.0005643 ***
+SMQ681                       0.102129   0.059907  1.7048 0.0882301 .  
+activity                    -0.090669   0.052991 -1.7110 0.0870746 .  
+raceEthCatHispanic          -0.361676   0.067043 -5.3947 6.863e-08 ***
+raceEthCatNH Asian          -0.787660   0.119233 -6.6061 3.946e-11 ***
+raceEthCatNH Black          -0.346716   0.065189 -5.3187 1.045e-07 ***
+raceEthCatNH Other/Multiple -0.137664   0.096014 -1.4338 0.1516323    
+hi_caffeine                  0.119369   0.092434  1.2914 0.1965662    
+heavy_drink2                 0.038062   0.053537  0.7110 0.4771127    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+                (Intercept)               depress_cat.L               depress_cat.Q 
+                  0.5460763                   2.3058075                   0.6662495 
+              depress_cat.C               depress_cat^4              ageCat_1840-59 
+                  1.3471573                   0.9623758                   0.8283812 
+               ageCat_1860+                      SMQ681                    activity 
+                  0.8090580                   1.1075267                   0.9133201 
+         raceEthCatHispanic          raceEthCatNH Asian          raceEthCatNH Black 
+                  0.6965079                   0.4549079                   0.7070058 
+raceEthCatNH Other/Multiple                 hi_caffeine                heavy_drink2 
+                  0.8713918                   1.1267856                   1.0387961 
+                (Intercept)               depress_cat.L               depress_cat.Q 
+                  0.5460763                   2.3058075                   0.6662495 
+              depress_cat.C               depress_cat^4              ageCat_1840-59 
+                  1.3471573                   0.9623758                   0.8283812 
+               ageCat_1860+                      SMQ681                    activity 
+                  0.8090580                   1.1075267                   0.9133201 
+         raceEthCatHispanic          raceEthCatNH Asian          raceEthCatNH Black 
+                  0.6965079                   0.4549079                   0.7070058 
+raceEthCatNH Other/Multiple                 hi_caffeine                heavy_drink2 
+                  0.8713918                   1.1267856                   1.0387961 
+                 GVIF Df GVIF^(1/(2*Df))
+RIAGENDR     1.059197  1        1.029173
+ageCat_18    1.223982  2        1.051826
+INDFMPIR     1.149586  1        1.072187
+SMQ681       1.208305  1        1.099229
+raceEthCat   1.225887  4        1.025785
+activity     1.086719  1        1.042458
+hi_caffeine  1.099705  1        1.048668
+BMI_cat      1.114698  3        1.018262
+heavy_drink2 1.160023  1        1.077044
+depress_cat  1.126430  4        1.014993
+                GVIF Df GVIF^(1/(2*Df))
+depress_cat 1.021293  4        1.002637
+raceEthCat  1.044998  4        1.005517
+ageCat_18   1.042034  2        1.010347
+                 GVIF Df GVIF^(1/(2*Df))
+depress_cat  1.060084  4        1.007320
+ageCat_18    1.170830  2        1.040216
+SMQ681       1.134808  1        1.065274
+activity     1.056344  1        1.027786
+raceEthCat   1.134959  4        1.015950
+hi_caffeine  1.092136  1        1.045053
+heavy_drink2 1.145752  1        1.070398
+                        "Stratified by day_sleep"
+ ""                      "0"           "1"           "p"      "test"
+  "n"                    "4339"        "1517"        ""       ""    
+  "RIAGENDR = 2 (%)"     "2167 (49.9)" "849 (56.0)"  "<0.001" ""    
+  "ageCat_18 (%)"        ""            ""            "0.001"  ""    
+  "   18-39"             "1405 (32.4)" "569 (37.5)"  ""       ""    
+  "   40-59"             "1322 (30.5)" "410 (27.0)"  ""       ""    
+  "   60+"               "1612 (37.2)" "538 (35.5)"  ""       ""    
+  "INDFMPIR (mean (SD))" "2.60 (1.62)" "2.31 (1.57)" "<0.001" ""    
+  "SMQ681 = 2 (%)"       "3015 (79.5)" "1013 (75.5)" "0.003"  ""    
+  "raceEthCat (%)"       ""            ""            "<0.001" ""    
+  "   NH White"          "1342 (30.9)" "690 (45.5)"  ""       ""    
+  "   Hispanic"          "1031 (23.8)" "304 (20.0)"  ""       ""    
+  "   NH Asian"          "729 (16.8)"  "120 (7.9)"   ""       ""    
+  "   NH Black"          "1033 (23.8)" "310 (20.4)"  ""       ""    
+  "   NH Other/Multiple" "204 (4.7)"   "93 (6.1)"    ""       ""    
+  "activity = 1 (%)"     "2942 (67.9)" "1006 (66.4)" "0.325"  ""    
+  "hi_caffeine = 1 (%)"  "139 (4.4)"   "81 (7.0)"    "0.001"  ""    
+  "BMI_cat (%)"          ""            ""            "<0.001" ""    
+  "   normal"            "1074 (26.7)" "298 (21.1)"  ""       ""    
+  "   obese"             "1538 (38.2)" "698 (49.4)"  ""       ""    
+  "   overweight"        "1333 (33.2)" "394 (27.9)"  ""       ""    
+  "   underweight"       "76 (1.9)"    "23 (1.6)"    ""       ""    
+  "heavy_drink2 = 1 (%)" "1180 (31.2)" "503 (37.6)"  "<0.001" ""    
+  "depress_cat (%)"      ""            ""            "<0.001" ""    
+  "   nodep"             "3093 (82.5)" "679 (51.4)"  ""       ""    
+  "   mild_dep"          "456 (12.2)"  "381 (28.8)"  ""       ""    
+  "   mod_dep"           "134 (3.6)"   "158 (12.0)"  ""       ""    
+  "   mod_sev_dep"       "48 (1.3)"    "76 (5.8)"    ""       ""    
+  "   sev_dep"           "16 (0.4)"    "27 (2.0)"    ""       ""    
+RStudioGD 
+        2 
+RStudioGD 
+        2 
