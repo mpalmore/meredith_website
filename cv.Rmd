@@ -1,7 +1,5 @@
 ---
 title: "Resume"
-description: |
-  My Resume
 output:
   distill::distill_article:
     toc: true
@@ -104,7 +102,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 # Publications
 
-[Turner, A., Wong, D., Khan, M. D., Driesbach, C., Palmore, M., & Miller, C. Multi-omics approaches to study long noncoding RNA function in atherosclerosis. Front Cardiovasc Med. (2019) 6:9. doi: 10.3389/fcvm.2019.00009]<https://www.frontiersin.org/articles/10.3389/fcvm.2019.00009/full>
+[Turner, A., Wong, D., Khan, M. D., Driesbach, C., Palmore, M., & Miller, C. Multi-omics approaches to study long noncoding RNA function in atherosclerosis. Front Cardiovasc Med. (2019) 6:9. doi: 10.3389/fcvm.2019.00009](https://www.frontiersin.org/articles/10.3389/fcvm.2019.00009/full)
 
 ***
 
