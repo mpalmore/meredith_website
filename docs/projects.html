@@ -2437,7 +2437,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="nav-right">
 <a href="index.html">Home</a>
 <a href="projects.html">Projects</a>
-<a href="cv.html">CV</a>
+<a href="cv.html">Resume</a>
 <a href="https://github.com/mpalmore">
 <i class="fa fa-github" aria-hidden="true"></i>
 </a>
@@ -2501,6 +2501,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/ddsjoberg/gtsummary'>gtsummary</a></span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -3056,7 +3057,7 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
   &quot;   mod_sev_dep&quot;       &quot;48 (1.3)&quot;    &quot;76 (5.8)&quot;    &quot;&quot;       &quot;&quot;    
   &quot;   sev_dep&quot;           &quot;16 (0.4)&quot;    &quot;27 (2.0)&quot;    &quot;&quot;       &quot;&quot;    </code></pre>
 </div>
-<p>####Figure 1: Caffeine intake and Daytime Sleepiness</p>
+<h4 id="figure-1-caffeine-intake-and-daytime-sleepiness">Figure 1: Caffeine intake and Daytime Sleepiness</h4>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#png("Barplot Caffeine.png")</span>
@@ -3154,762 +3155,11 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
 </div>
 <p>Fit the weighted univariate models and store the results. We are calculating the change in log prevalence odds of daytime sleepiness, our outcome, among levels of the “exposures”. Our exposures of interest are sex, age groups, income, smoking, race/ethnicity, any activity, high caffeine intake, BMI categories, heavy drinking, and ordinal depression scores. Log-binomial regression is used to estimate crude associations.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>model_1w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>RIAGENDR</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_2w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>ageCat_18</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_3w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>INDFMPIR</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_4w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>SMQ681</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_5w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>raceEthCat</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_6w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>activity</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_7w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>hi_caffeine</span>, design<span class='op'>=</span><span class='va'>NHANES_MEC</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_8w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>BMI_cat</span>, design<span class='op'>=</span><span class='va'>NHANES_MEC</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_9w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>heavy_drink2</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>model_10w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>depress_cat</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-</div>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#exponentiated coefficients</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    RIAGENDR 
-  0.2048742   1.2206388 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>   (Intercept) ageCat_1840-59   ageCat_1860+ 
-     0.3183220      0.7924395      0.8044204 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    INDFMPIR 
-  0.3767510   0.9118087 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)      SMQ681 
-  0.4012766   0.8151968 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                (Intercept)          raceEthCatNH Black 
-                  0.3024167                   0.8091614 
-         raceEthCatNH Asian          raceEthCatHispanic 
-                  0.4615732                   0.7857788 
-raceEthCatNH Other/Multiple 
-                  1.2061075 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    activity 
-  0.2791679   0.9971760 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept) hi_caffeine 
-  0.2679387   1.4338962 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>       (Intercept) BMI_catunderweight  BMI_catoverweight 
-         0.2221463          1.2402763          1.0529336 
-      BMI_catobese 
-         1.5503832 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code> (Intercept) heavy_drink2 
-   0.2525171    1.2794627 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>  (Intercept) depress_cat.L depress_cat.Q depress_cat.C depress_cat^4 
-    0.4645206     2.2088022     0.5980783     1.2557422     0.9903052 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># p-values</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ RIAGENDR, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -1.58536    0.15227 -10.412 5.65e-08 ***
-RIAGENDR     0.19937    0.08474   2.353   0.0338 *  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.000171)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ ageCat_18, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-               Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)    -1.14469    0.05047 -22.680 7.73e-12 ***
-ageCat_1840-59 -0.23264    0.06337  -3.671  0.00282 ** 
-ageCat_1860+   -0.21763    0.07092  -3.069  0.00897 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.000171)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ INDFMPIR, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.97617    0.08189 -11.920 1.02e-08 ***
-INDFMPIR    -0.09233    0.01919  -4.811 0.000277 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.026985)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ SMQ681, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -0.91310    0.12122  -7.532 2.74e-06 ***
-SMQ681      -0.20433    0.05779  -3.535  0.00329 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.0229)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ raceEthCat, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-                            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)                 -1.19595    0.04884 -24.490 6.03e-11 ***
-raceEthCatNH Black          -0.21176    0.07694  -2.752   0.0188 *  
-raceEthCatNH Asian          -0.77311    0.09487  -8.149 5.48e-06 ***
-raceEthCatHispanic          -0.24108    0.10810  -2.230   0.0475 *  
-raceEthCatNH Other/Multiple  0.18740    0.13200   1.420   0.1834    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.000171)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ activity, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -1.275942   0.059430 -21.470  4.1e-12 ***
-activity    -0.002828   0.068327  -0.041    0.968    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.000872)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ hi_caffeine, design = NHANES_MEC, 
-    family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all_MEC, inAnalysis == 1)
-
-Coefficients:
-            Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept) -1.31700    0.03985 -33.050 1.09e-14 ***
-hi_caffeine  0.36040    0.12757   2.825   0.0135 *  
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.104844)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ BMI_cat, design = NHANES_MEC, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all_MEC, inAnalysis == 1)
-
-Coefficients:
-                   Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)        -1.50442    0.07922 -18.991 2.55e-10 ***
-BMI_catunderweight  0.21533    0.28243   0.762 0.460528    
-BMI_catoverweight   0.05158    0.13810   0.374 0.715285    
-BMI_catobese        0.43850    0.10153   4.319 0.000998 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.064164)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ heavy_drink2, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-             Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)  -1.37628    0.06028 -22.830 1.78e-12 ***
-heavy_drink2  0.24644    0.05956   4.138  0.00101 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.022591)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-svyglm(formula = day_sleep ~ depress_cat, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
-
-Survey design:
-subset(NHANES_all, inAnalysis == 1)
-
-Coefficients:
-               Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)   -0.766749   0.059637 -12.857 5.71e-08 ***
-depress_cat.L  0.792450   0.105804   7.490 1.22e-05 ***
-depress_cat.Q -0.514034   0.093152  -5.518 0.000181 ***
-depress_cat.C  0.227727   0.075092   3.033 0.011395 *  
-depress_cat^4 -0.009742   0.075368  -0.129 0.899485    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for quasibinomial family taken to be 1.026629)
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#confidence intervals</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                2.5 %    97.5 %
-(Intercept) 0.1477932 0.2840011
-RIAGENDR    1.0177826 1.4639265</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                   2.5 %    97.5 %
-(Intercept)    0.2854385 0.3549939
-ageCat_1840-59 0.6910498 0.9087050
-ageCat_1860+   0.6901471 0.9376148</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                2.5 %    97.5 %
-(Intercept) 0.3160633 0.4490912
-INDFMPIR    0.8750411 0.9501211</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                2.5 %    97.5 %
-(Intercept) 0.3094055 0.5204269
-SMQ681      0.7201610 0.9227741</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                                2.5 %    97.5 %
-(Intercept)                 0.2715973 0.3367333
-raceEthCatNH Black          0.6831119 0.9584698
-raceEthCatNH Asian          0.3745883 0.5687572
-raceEthCatHispanic          0.6193948 0.9968574
-raceEthCatNH Other/Multiple 0.9020059 1.6127337</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                2.5 %   97.5 %
-(Intercept) 0.2457586 0.317119
-activity    0.8612465 1.154559</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                2.5 %    97.5 %
-(Intercept) 0.2459903 0.2918454
-hi_caffeine 1.0906713 1.8851310</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                       2.5 %    97.5 %
-(Intercept)        0.1869307 0.2639961
-BMI_catunderweight 0.6702992 2.2949234
-BMI_catoverweight  0.7793414 1.4225720
-BMI_catobese       1.2427144 1.9342241</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                 2.5 %    97.5 %
-(Intercept)  0.2218905 0.2873711
-heavy_drink2 1.1260268 1.4538061</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                  2.5 %    97.5 %
-(Intercept)   0.4073797 0.5296763
-depress_cat.L 1.7499334 2.7879959
-depress_cat.Q 0.4872101 0.7341754
-depress_cat.C 1.0644425 1.4814219
-depress_cat^4 0.8389312 1.1689926</code></pre>
 </div>
 <p>Let’s also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># fit the unweighted models and store the results</span>
 
-<span class='va'>model_1u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>RIAGENDR</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_2u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>ageCat_18</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_3u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>INDFMPIR</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_4u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>SMQ681</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_5u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>raceEthCat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_6u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>activity</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_7u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>hi_caffeine</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_8u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>BMI_cat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_9u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>heavy_drink2</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-<span class='va'>model_10u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>depress_cat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
-
-
-<span class='co'>#exponentiated coefficients</span>
-
-<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_1u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    RIAGENDR 
-   0.196535    1.196791 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_2u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>   (Intercept) ageCat_1840-59   ageCat_1860+ 
-     0.2882472      0.8212414      0.8681179 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_3u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    INDFMPIR 
-  0.3271014   0.9203742 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_4u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)      SMQ681 
-  0.3509858   0.8464771 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_5u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                (Intercept)          raceEthCatNH Black 
-                  0.3395669                   0.6797673 
-         raceEthCatNH Asian          raceEthCatHispanic 
-                  0.4162442                   0.6706052 
-raceEthCatNH Other/Multiple 
-                  0.9221490 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_6u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept)    activity 
-  0.2672278   0.9535407 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_7u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>(Intercept) hi_caffeine 
-   0.261714    1.406810 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_8u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>       (Intercept) BMI_catunderweight  BMI_catoverweight 
-         0.2172012          1.0696224          1.0503686 
-      BMI_catobese 
-         1.4372141 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_9u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code> (Intercept) heavy_drink2 
-   0.2432354    1.2287319 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_10u</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>  (Intercept) depress_cat.L depress_cat.Q depress_cat.C depress_cat^4 
-    0.4430082     2.4211563     0.6090507     1.2299172     0.9133011 </code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># p-values</span>
-<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_1u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ RIAGENDR, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8131  -0.8131  -0.7323   1.5922   1.7013  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.62691    0.07366 -22.087  &lt; 2e-16 ***
-RIAGENDR     0.17964    0.04462   4.026 5.68e-05 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 6700.0  on 5855  degrees of freedom
-Residual deviance: 6683.6  on 5854  degrees of freedom
-AIC: 6687.6
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_2u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ ageCat_18, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8246  -0.7589  -0.7589   1.5773   1.6976  
-
-Coefficients:
-               Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)    -1.24394    0.03537  -35.17  &lt; 2e-16 ***
-ageCat_1840-59 -0.19694    0.05579   -3.53 0.000416 ***
-ageCat_1860+   -0.14143    0.05142   -2.75 0.005956 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 6700  on 5855  degrees of freedom
-Residual deviance: 6686  on 5853  degrees of freedom
-AIC: 6692
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_3u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ INDFMPIR, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8901  -0.8240  -0.7498   1.5176   1.7506  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.11749    0.04100 -27.257  &lt; 2e-16 ***
-INDFMPIR    -0.08297    0.01507  -5.507 3.65e-08 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 5833.7  on 5020  degrees of freedom
-Residual deviance: 5802.5  on 5019  degrees of freedom
-  (835 observations deleted due to missingness)
-AIC: 5806.5
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_4u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ SMQ681, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8397  -0.7611  -0.7611   1.5580   1.6615  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.04701    0.09649 -10.851   &lt;2e-16 ***
-SMQ681      -0.16667    0.05368  -3.105   0.0019 ** 
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 5895.8  on 5131  degrees of freedom
-Residual deviance: 5886.6  on 5130  degrees of freedom
-  (724 observations deleted due to missingness)
-AIC: 5890.6
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_5u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ raceEthCat, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.9109  -0.8667  -0.7189   1.4697   1.9782  
-
-Coefficients:
-                            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)                 -1.08008    0.03094 -34.911  &lt; 2e-16 ***
-raceEthCatNH Black          -0.38600    0.05864  -6.583 4.61e-11 ***
-raceEthCatNH Asian          -0.87648    0.09007  -9.731  &lt; 2e-16 ***
-raceEthCatHispanic          -0.39957    0.05914  -6.756 1.41e-11 ***
-raceEthCatNH Other/Multiple -0.08105    0.09134  -0.887    0.375    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 6700.0  on 5855  degrees of freedom
-Residual deviance: 6548.6  on 5851  degrees of freedom
-AIC: 6558.6
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_6u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ activity, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.7886  -0.7670  -0.7670   1.6246   1.6536  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.31965    0.03798 -34.746   &lt;2e-16 ***
-activity    -0.04757    0.04672  -1.018    0.309    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 6689.5  on 5848  degrees of freedom
-Residual deviance: 6688.5  on 5847  degrees of freedom
-  (7 observations deleted due to missingness)
-AIC: 6692.5
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_7u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ hi_caffeine, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.9583  -0.7790  -0.7790   1.4136   1.6374  
-
-Coefficients:
-            Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept) -1.34050    0.02617 -51.223  &lt; 2e-16 ***
-hi_caffeine  0.34132    0.09211   3.705 0.000211 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 5036.4  on 4338  degrees of freedom
-Residual deviance: 5025.1  on 4337  degrees of freedom
-  (1517 observations deleted due to missingness)
-AIC: 5029.1
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_8u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ BMI_cat, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8651  -0.8651  -0.7197   1.5259   1.7475  
-
-Coefficients:
-                   Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)        -1.52693    0.05125 -29.792  &lt; 2e-16 ***
-BMI_catunderweight  0.06731    0.18975   0.355    0.723    
-BMI_catoverweight   0.04914    0.06772   0.726    0.468    
-BMI_catobese        0.36271    0.06010   6.035 1.59e-09 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 6228.3  on 5433  degrees of freedom
-Residual deviance: 6174.6  on 5430  degrees of freedom
-  (422 observations deleted due to missingness)
-AIC: 6182.6
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_9u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ heavy_drink2, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--0.8427  -0.7466  -0.7466   1.5542   1.6815  
-
-Coefficients:
-             Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)  -1.41373    0.03009 -46.988  &lt; 2e-16 ***
-heavy_drink2  0.20598    0.04795   4.296 1.74e-05 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 5884.4  on 5119  degrees of freedom
-Residual deviance: 5866.5  on 5118  degrees of freedom
-  (736 observations deleted due to missingness)
-AIC: 5870.5
-
-Number of Fisher Scoring iterations: 6</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_10u</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>
-Call:
-glm(formula = day_sleep ~ depress_cat, family = binomial(link = &quot;log&quot;), 
-    data = unweighted_data)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--1.4061  -0.6300  -0.6300   0.9895   1.8519  
-
-Coefficients:
-              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)   -0.81417    0.03125 -26.052  &lt; 2e-16 ***
-depress_cat.L  0.88425    0.08153  10.845  &lt; 2e-16 ***
-depress_cat.Q -0.49585    0.07469  -6.639 3.16e-11 ***
-depress_cat.C  0.20695    0.06410   3.229  0.00124 ** 
-depress_cat^4 -0.09069    0.05656  -1.603  0.10883    
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 5815.4  on 5067  degrees of freedom
-Residual deviance: 5335.0  on 5063  degrees of freedom
-  (788 observations deleted due to missingness)
-AIC: 5345
-
-Number of Fisher Scoring iterations: 6</code></pre>
 </div>
 <h4 id="part-c-fit-initial-mlr-using-all-predictors">Part c: Fit initial MLR using all predictors</h4>
 <p>Multivariable Poisson regression with robust standard errors will be used to estimate adjusted prevalence ratios. Unweighted multivariable candidate models were selected in 4 ways:</p>
@@ -4363,17 +3613,6 @@ raceEthCatNH Other/Multiple              ageCat_1840-59
                   0.8147754 </code></pre>
 </div>
 <p>We see the final model has depression category, race, and age as the most parsimonious predictors explaining daytime sleepiness in our sample</p>
-<p>Vif - there is no concerning inflation</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/car/man/vif.html'>vif</a></span><span class='op'>(</span><span class='va'>mod_final</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>                GVIF Df GVIF^(1/(2*Df))
-depress_cat 1.021293  4        1.002637
-raceEthCat  1.044998  4        1.005517
-ageCat_18   1.042034  2        1.010347</code></pre>
-</div>
 <p>Now, let’s look at our a-priori models</p>
 <p><strong>Model using behavioral risk factors only (a priori)</strong></p>
 <div class="layout-chunk" data-layout="l-body">
@@ -4629,7 +3868,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Q-Q plot of deviance residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-49-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-48-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"Q-Q_final_behav_mod.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 
@@ -4645,7 +3884,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Q-Q plot of deviance residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-49-2.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-48-2.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"Q-Q_all_variables.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4662,7 +3901,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"Pearson residuals"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of pearson residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-50-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-49-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Looking at the plot we can filter to see which observation is the outlier</span>
 <span class='va'>fit_dat_fin_apriori</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> 
@@ -4728,7 +3967,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"Leverage values"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of leverages"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-51-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-50-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit_dat_fin_apriori</span><span class='op'>$</span><span class='va'>lev</span><span class='op'>)</span>
 </code></pre>
@@ -4777,7 +4016,7 @@ $ lev                             &lt;dbl&gt; 0.010388046, 0.011440973, 0.~</cod
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"DFITS values"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of DFIT values"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-52-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-51-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"dfits_apriori.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 
@@ -4858,7 +4097,7 @@ $ lev                             &lt;dbl&gt; 0.010388046, 0.011440973, 0.~</cod
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title<span class='op'>=</span><span class='st'>"Leverage-Residual Plot"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-53-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-52-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"L-R plot apriori.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -5043,12 +4282,1051 @@ hi_caffeine  1.092136  1        1.045053
 heavy_drink2 1.145752  1        1.070398</code></pre>
 </div>
 <h3 id="results">Results</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>unweighted_data</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>day_sleep</span>, <span class='va'>RIAGENDR</span>, <span class='va'>ageCat_18</span>, <span class='va'>INDFMPIR</span>, <span class='va'>SMQ681</span>, <span class='va'>raceEthCat</span>, <span class='va'>activity</span>, <span class='va'>hi_caffeine</span>, <span class='va'>BMI_cat</span>, <span class='va'>heavy_drink2</span>, <span class='va'>depress_cat</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
+    method <span class='op'>=</span> <span class='va'>glm</span>,
+    y <span class='op'>=</span> <span class='va'>day_sleep</span>,
+    method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>,
+    exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    pvalue_fun <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/style_pvalue.html'>style_pvalue</a></span><span class='op'>(</span><span class='va'>.x</span>, digits <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  <span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Crude Table"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div id="zvgxgrzxaq" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#zvgxgrzxaq .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#zvgxgrzxaq .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#zvgxgrzxaq .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#zvgxgrzxaq .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#zvgxgrzxaq .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#zvgxgrzxaq .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#zvgxgrzxaq .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#zvgxgrzxaq .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zvgxgrzxaq .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#zvgxgrzxaq .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#zvgxgrzxaq .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#zvgxgrzxaq .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#zvgxgrzxaq .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#zvgxgrzxaq .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zvgxgrzxaq .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#zvgxgrzxaq .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#zvgxgrzxaq .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#zvgxgrzxaq .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#zvgxgrzxaq .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#zvgxgrzxaq .gt_left {
+  text-align: left;
+}
+
+#zvgxgrzxaq .gt_center {
+  text-align: center;
+}
+
+#zvgxgrzxaq .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#zvgxgrzxaq .gt_font_normal {
+  font-weight: normal;
+}
+
+#zvgxgrzxaq .gt_font_bold {
+  font-weight: bold;
+}
+
+#zvgxgrzxaq .gt_font_italic {
+  font-style: italic;
+}
+
+#zvgxgrzxaq .gt_super {
+  font-size: 65%;
+}
+
+#zvgxgrzxaq .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  <caption><span id="tab:unnamed-chunk-56">Table 1: </span>Crude Table</caption>
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>N</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>RR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>q-value</strong><sup class="gt_footnote_marks">2</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">RIAGENDR</td>
+<td class="gt_row gt_center">5856</td>
+<td class="gt_row gt_center">1.20</td>
+<td class="gt_row gt_center">1.10, 1.31</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">ageCat_18</td>
+<td class="gt_row gt_center">5856</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">18-39</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">40-59</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.82</td>
+<td class="gt_row gt_center">0.74, 0.92</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">60+</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.87</td>
+<td class="gt_row gt_center">0.78, 0.96</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">INDFMPIR</td>
+<td class="gt_row gt_center">5021</td>
+<td class="gt_row gt_center">0.92</td>
+<td class="gt_row gt_center">0.89, 0.95</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">SMQ681</td>
+<td class="gt_row gt_center">5132</td>
+<td class="gt_row gt_center">0.85</td>
+<td class="gt_row gt_center">0.76, 0.94</td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.002</td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.003</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">raceEthCat</td>
+<td class="gt_row gt_center">5856</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH White</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Black</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.68</td>
+<td class="gt_row gt_center">0.61, 0.76</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Asian</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.42</td>
+<td class="gt_row gt_center">0.35, 0.49</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Hispanic</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.67</td>
+<td class="gt_row gt_center">0.60, 0.75</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Other/Multiple</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.92</td>
+<td class="gt_row gt_center">0.76, 1.09</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">activity</td>
+<td class="gt_row gt_center">5849</td>
+<td class="gt_row gt_center">0.95</td>
+<td class="gt_row gt_center">0.87, 1.05</td>
+<td class="gt_row gt_center">0.31</td>
+<td class="gt_row gt_center">0.31</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">hi_caffeine</td>
+<td class="gt_row gt_center">4339</td>
+<td class="gt_row gt_center">1.41</td>
+<td class="gt_row gt_center">1.16, 1.67</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">BMI_cat</td>
+<td class="gt_row gt_center">5434</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">normal</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">underweight</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">1.07</td>
+<td class="gt_row gt_center">0.71, 1.51</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">overweight</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">1.05</td>
+<td class="gt_row gt_center">0.92, 1.20</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">obese</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">1.44</td>
+<td class="gt_row gt_center">1.28, 1.62</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">heavy_drink2</td>
+<td class="gt_row gt_center">5120</td>
+<td class="gt_row gt_center">1.23</td>
+<td class="gt_row gt_center">1.12, 1.35</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">depress_cat</td>
+<td class="gt_row gt_center">5068</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.L</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">2.42</td>
+<td class="gt_row gt_center">2.02, 2.79</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.Q</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.61</td>
+<td class="gt_row gt_center">0.52, 0.70</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.C</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">1.23</td>
+<td class="gt_row gt_center">1.08, 1.40</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat^4</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center">0.91</td>
+<td class="gt_row gt_center">0.82, 1.02</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+  </tbody>
+  
+  <tfoot>
+    <tr class="gt_footnotes">
+      <td colspan="6">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>1</em>
+          </sup>
+           
+          RR = Relative Risk, CI = Confidence Interval
+          <br />
+        </p>
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>2</em>
+          </sup>
+           
+          False discovery rate correction for multiple testing
+          <br />
+        </p>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
 <p>Best subset model included race categories, age categories, and depression score categories as predictors. The final model was the model including behavioral variables selected a-priori, along with age and depression score which were identified through the AI model. This final model best suits the epidemiological question at hand: which risk factors are most important in the relationship with excessive daytime sleepiness, with a special emphasis on modifiable lifestyle factors?</p>
 <ul>
 <li>The predictors in the final model: age categories, race categories, depression score categories, current smoking, weekly moderate to vigorous activity, high caffeine intake, and heavy alcohol use</li>
 </ul>
 <p>The dataset was large, so the model is still parsimonious with many predictors. All candidate models had Pearson’s Goodness of Fit p-values equal to 1, so all fit the data very well. None of the variables showed signs of collinearity for any of the candidate models.</p>
 <h4 id="results-from-the-final-model">Results from the final model:</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mod_final_behav</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value </span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Final model"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> 
+</code></pre>
+</div>
+<div id="hcjkayzual" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>html {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
+}
+
+#hcjkayzual .gt_table {
+  display: table;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#hcjkayzual .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 0;
+  padding-bottom: 6px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#hcjkayzual .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#hcjkayzual .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#hcjkayzual .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#hcjkayzual .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#hcjkayzual .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#hcjkayzual .gt_group_heading {
+  padding: 8px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hcjkayzual .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#hcjkayzual .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#hcjkayzual .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#hcjkayzual .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#hcjkayzual .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 12px;
+}
+
+#hcjkayzual .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hcjkayzual .gt_first_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#hcjkayzual .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#hcjkayzual .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding: 4px;
+}
+
+#hcjkayzual .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#hcjkayzual .gt_sourcenote {
+  font-size: 90%;
+  padding: 4px;
+}
+
+#hcjkayzual .gt_left {
+  text-align: left;
+}
+
+#hcjkayzual .gt_center {
+  text-align: center;
+}
+
+#hcjkayzual .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#hcjkayzual .gt_font_normal {
+  font-weight: normal;
+}
+
+#hcjkayzual .gt_font_bold {
+  font-weight: bold;
+}
+
+#hcjkayzual .gt_font_italic {
+  font-style: italic;
+}
+
+#hcjkayzual .gt_super {
+  font-size: 65%;
+}
+
+#hcjkayzual .gt_footnote_marks {
+  font-style: italic;
+  font-weight: normal;
+  font-size: 65%;
+}
+</style>
+<table class="gt_table">
+  <caption><span id="tab:unnamed-chunk-57">Table 2: </span>Final model</caption>
+  
+  <thead class="gt_col_headings">
+    <tr>
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1"><strong>Characteristic</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>IRR</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>95% CI</strong><sup class="gt_footnote_marks">1</sup></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>p-value</strong></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1"><strong>q-value</strong><sup class="gt_footnote_marks">2</sup></th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">depress_cat</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.L</td>
+<td class="gt_row gt_center">2.31</td>
+<td class="gt_row gt_center">1.73, 2.98</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.Q</td>
+<td class="gt_row gt_center">0.67</td>
+<td class="gt_row gt_center">0.52, 0.84</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat.C</td>
+<td class="gt_row gt_center">1.35</td>
+<td class="gt_row gt_center">1.08, 1.68</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">depress_cat^4</td>
+<td class="gt_row gt_center">0.96</td>
+<td class="gt_row gt_center">0.80, 1.16</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">ageCat_18</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.010</td>
+<td class="gt_row gt_center" style="font-weight: bold;">0.023</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">18-39</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">40-59</td>
+<td class="gt_row gt_center">0.83</td>
+<td class="gt_row gt_center">0.71, 0.96</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">60+</td>
+<td class="gt_row gt_center">0.81</td>
+<td class="gt_row gt_center">0.70, 0.94</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">SMQ681</td>
+<td class="gt_row gt_center">1.11</td>
+<td class="gt_row gt_center">0.96, 1.28</td>
+<td class="gt_row gt_center">0.2</td>
+<td class="gt_row gt_center">0.2</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">activity</td>
+<td class="gt_row gt_center">0.91</td>
+<td class="gt_row gt_center">0.80, 1.04</td>
+<td class="gt_row gt_center">0.2</td>
+<td class="gt_row gt_center">0.2</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">raceEthCat</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td>
+<td class="gt_row gt_center" style="font-weight: bold;"><0.001</td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH White</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center">—</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Black</td>
+<td class="gt_row gt_center">0.71</td>
+<td class="gt_row gt_center">0.60, 0.83</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Asian</td>
+<td class="gt_row gt_center">0.45</td>
+<td class="gt_row gt_center">0.35, 0.59</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">Hispanic</td>
+<td class="gt_row gt_center">0.70</td>
+<td class="gt_row gt_center">0.59, 0.82</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="text-align: left; text-indent: 10px;">NH Other/Multiple</td>
+<td class="gt_row gt_center">0.87</td>
+<td class="gt_row gt_center">0.68, 1.11</td>
+<td class="gt_row gt_center"></td>
+<td class="gt_row gt_center"></td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">hi_caffeine</td>
+<td class="gt_row gt_center">1.13</td>
+<td class="gt_row gt_center">0.88, 1.42</td>
+<td class="gt_row gt_center">0.3</td>
+<td class="gt_row gt_center">0.4</td></tr>
+    <tr><td class="gt_row gt_left" style="font-weight: bold;">heavy_drink2</td>
+<td class="gt_row gt_center">1.04</td>
+<td class="gt_row gt_center">0.91, 1.18</td>
+<td class="gt_row gt_center">0.6</td>
+<td class="gt_row gt_center">0.6</td></tr>
+  </tbody>
+  
+  <tfoot>
+    <tr class="gt_footnotes">
+      <td colspan="5">
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>1</em>
+          </sup>
+           
+          IRR = Incidence Rate Ratio, CI = Confidence Interval
+          <br />
+        </p>
+        <p class="gt_footnote">
+          <sup class="gt_footnote_marks">
+            <em>2</em>
+          </sup>
+           
+          False discovery rate correction for multiple testing
+          <br />
+        </p>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+</div>
+</div>
 <ul>
 <li>Belonging to older age groups (40-59 years &amp; 60+ years) conferred a decreased risk of excessive daytime sleepiness when compared to a referent group of 18-39 years, contrary to what is expected based on the literature
 <ul>
@@ -5071,7 +5349,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
 <p>Conflicting results emphasize the need for more research is needed to uncover the links between age, race, alcohol use, tobacco smoking and exercise on sleep quality</p>
 <p>High daily caffeine consumption is a modifiable risk factor that could play a role in causing excessive sleepiness during the day.</p>
 <p>Based on these results and the results of previous research, it may be clinically advisable to address sleep hygiene in people with depression and obesity to prevent future morbidity and mortality.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

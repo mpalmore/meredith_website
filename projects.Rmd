@@ -49,6 +49,7 @@ library(foreign)
 library(dplyr)
 library(tidyverse)
 library(here)
+library(gtsummary)
 ```
 
 
@@ -456,7 +457,7 @@ dotable1 <- print(table1, quote=TRUE, noSpaces=TRUE)
 
 ```
 
-####Figure 1: Caffeine intake and Daytime Sleepiness
+#### Figure 1: Caffeine intake and Daytime Sleepiness
 
 ```{r}
 #png("Barplot Caffeine.png")
@@ -545,7 +546,7 @@ NHANES_MEC <- subset(NHANES_all_MEC, inAnalysis==1)
 
 Fit the weighted univariate models and store the results. We are calculating the change in log prevalence odds of daytime sleepiness, our outcome, among levels of the "exposures". Our exposures of interest are sex, age groups, income, smoking, race/ethnicity, any activity, high caffeine intake, BMI categories, heavy drinking, and ordinal depression scores. Log-binomial regression is used to estimate crude associations.
 
-```{r}
+```{r echo=FALSE}
 
 model_1w <- svyglm(day_sleep~RIAGENDR, design=NHANES, family=quasibinomial(link="log"))
 model_2w <- svyglm(day_sleep~ageCat_18, design=NHANES, family=quasibinomial(link="log"))
@@ -560,7 +561,7 @@ model_10w <- svyglm(day_sleep~depress_cat, design=NHANES, family=quasibinomial(l
 
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 #exponentiated coefficients
 
 exp(model_1w$coefficients)
@@ -599,9 +600,10 @@ exp(confint(model_9w))
 exp(confint(model_10w))
 ```
 
+
 Let's also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population. 
 
-```{r}
+```{r, echo=FALSE}
 
 # fit the unweighted models and store the results
 
@@ -616,6 +618,9 @@ model_8u <- glm(day_sleep~BMI_cat, family=binomial(link="log"), data = unweighte
 model_9u <- glm(day_sleep~heavy_drink2, family=binomial(link="log"), data = unweighted_data)
 model_10u <- glm(day_sleep~depress_cat, family=binomial(link="log"), data = unweighted_data)
 
+```
+
+```{r include=FALSE}
 
 #exponentiated coefficients
 
@@ -707,6 +712,8 @@ exp(MLR_3$coefficients)
 
 ```
  
+
+ 
 The unweighted regression results are qualitatively the same as the weighted regression results. I I also am not able to easily perform regression diagnostics with the survey weighted glm, so I will proceed with the unweighted model 3 for simplicity. This is reasonable, since we are trying to observe risk factors to daytime sleepiness in our sample and are not trying to predict prevalence of these risk factors in the United States population. 
 
 
@@ -735,12 +742,6 @@ exp(mod_final$coefficients)
 ```
 
 We see the  final model has depression category, race, and age as the most parsimonious predictors explaining daytime sleepiness in our sample
-
-Vif - there is no concerning inflation
-
-```{r}
-vif(mod_final)
-```
 
 Now, let's look at our a-priori models
 
@@ -876,24 +877,6 @@ fit_dat_fin %>%
 
 ggsave("pearson_resids_final_behave_model.png", width = 6, height = 4, units = "in")
 
-```
-
-
-
-```{r eval=FALSE, include=FALSE}
-# 
-# fit_dat_fin <- as.data.frame(mod_final$fitted.values)
-# pearson_res_fin <- residuals(mod_final, type = "pearson")
-# fit_dat_fin <- cbind(fit_dat_fin, pearson_res_fin)
-# 
-# fit_dat_fin %>%
-# ggplot(aes(x = mod_final$fitted.values, y = pearson_res_fin)) +
-# geom_point() +
-# geom_hline(yintercept = c(-2, 0, 2), col="red") +
-# geom_smooth(method = lm) +
-# labs(x = "Fitted values", y = "Pearson Residuals", title = "Residuals vs. Fitted values")
-# 
-# ggsave("pearson_resids_best_sub.png", width = 6, height = 4, units = "in")
 ```
 
 Now, let's create a Q-Q plot of deviance residuals for the final model and the model including all covariates
@@ -1058,6 +1041,26 @@ vif(mod_final_behav) # check VIF of a priori model
 
 ### Results 
 
+
+```{r}
+
+unweighted_data %>%
+  select(day_sleep, RIAGENDR, ageCat_18, INDFMPIR, SMQ681, raceEthCat, activity, hi_caffeine, BMI_cat, heavy_drink2, depress_cat) %>%
+  tbl_uvregression(
+    method = glm,
+    y = day_sleep,
+    method.args = list(family = binomial(link="log")),
+    exponentiate = TRUE,
+    pvalue_fun = ~style_pvalue(.x, digits = 2)
+  ) %>%
+  add_global_p() %>%  # add global p-value
+  add_q() %>%         # adjusts global p-values for multiple testing
+  bold_p() %>%        # bold p-values under a given threshold (default 0.05)
+  bold_p(t = 0.10, q = TRUE) %>% # now bold q-values under the threshold of 0.10
+  modify_caption("Crude Table") %>%
+  bold_labels()
+```
+
 Best subset model included race categories, age categories, and depression score categories as predictors. The final model was the model including behavioral variables selected a-priori, along with age and depression score which were identified through the AI model. This final model best suits the epidemiological question at hand: which risk factors are most important in the relationship with excessive daytime sleepiness, with a special emphasis on modifiable lifestyle factors?
 
  * The predictors in the final model: age categories, race categories, depression score categories, current smoking, weekly moderate to vigorous activity, high caffeine intake, and heavy alcohol use
@@ -1065,6 +1068,20 @@ Best subset model included race categories, age categories, and depression score
 The dataset was large, so the model is still parsimonious with many predictors. All candidate models had Pearson’s Goodness of Fit p-values equal to 1, so all fit the data very well. None of the variables showed signs of collinearity for any of the candidate models. 
 
 #### Results from the final model:
+
+```{r}
+
+mod_final_behav %>% 
+  tbl_regression(exponentiate = TRUE) %>%
+  add_global_p() %>%  # add global p-value 
+  add_q() %>%         # adjusts global p-values for multiple testing
+  bold_p() %>%        # bold p-values under a given threshold (default 0.05)
+  bold_p(t = 0.10, q = TRUE) %>% # now bold q-values under the threshold of 0.10
+  modify_caption("Final model") %>%
+  bold_labels() 
+
+```
+
 
 * Belonging to older age groups (40-59 years & 60+ years) conferred a decreased risk of excessive daytime sleepiness when compared to a referent group of 18-39 years, contrary to what is expected based on the literature
   + This may indicate that age-differential lifestyle factors confound the relationship between age and sleep quality. 

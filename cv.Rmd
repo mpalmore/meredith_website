@@ -1,11 +1,141 @@
 ---
-title: "Curriculum Vitae"
+title: "Resume"
 description: |
-  My curriculum vitae
+  My Resume
+output:
+  distill::distill_article:
+    toc: true
+    toc_float: true
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
+# Education
 
+**Johns Hopkins University, Bloomberg School of Public Health**
+
+*Baltimore, Maryland (Expected May 2022)*
+
+* Master of Health Science, Epidemiology, GPA: 3.93
+
+**University of Virginia, School of Arts and Sciences**
+
+*Charlottesville, Virginia (December 2019)*
+
+* Bachelor of Arts, Biology & Global Public Health Double Major, GPA: 3.52
+
+## Technical Skills
+
+* R
+* Microsoft Excel
+* Bash
+* STATA
+* Python
+* FIJI (ImageJ)
+
+## Relevant Coursework 
+
+* Advanced Epidemiology Methods
+* Statistical Methods in Public Health I-IV
+* Analysis of Longitudinal Data
+* Genetic Epidemiology I-III
+* Causal Inference
+* Statistical Computing
+* Data Science for Public Health
+* Pharmacoepidemiology Methods 
+* Health Research Methods
+* Introduction to Programming
+* Health and Society
+* Public Health Policy
+* Population Health Informatics
+
+***
+
+# Research Experience
+
+**Johns Hopkins Bloomberg School of Public Health**
+
+*Research Assistant, Department of Epidemiology (June 2021-Present)*
+
+*	Develop reproducible statistical analyses in R programming language to predict chronologic age from large, complex DNA methylation datasets and to determine biological aging relationships with COPD severity and morbidity
+* Perform appropriate methodologic procedures for statistical analyses such as overall descriptive statistics, exploratory data analyses including graphs and data transformations, and confirmatory analyses including statistical tests and models
+* Prepare written manuscripts of research findings including tables and figures of publication quality, relevant epidemiologic theory, and references
+*	Synthesize literature and collaborate with content-matter experts to inform meaningful statistical analyses
+*	Communicate research findings with colleagues both orally and in written progress reports 
+*	Implement revisions to analyses based on feedback from colleagues in weekly meetings
+*	Program in Bash to navigate secure datasets and organize reproducible statistical analyses through a remote computing cluster 
+
+*Research Assistant, Department of Molecular Microbiology and Immunology (March 2021-June 2021)*
+
+*	Applied epidemiology expertise and Excel skillset to enumerate the unenrolled population for a COVID-19 convalescent plasma trial
+
+**University of Virginia**
+
+*Research Assistant, Center for Public Health Genomics (June 2018-December 2019)*
+
+*	Optimized protocols for histological and immunohistochemical staining of frozen tissue specimen 
+*	Quantified image data using FIJI software to elucidate stages of disease progression in atherosclerotic arteries
+*	Recorded experimental results in a professional Excel spreadsheet
+
+***
+
+# Work Experience
+
+**The Fauquier Free Clinic**
+
+*Volunteer & Administrative Intern (September 2015-August 2020)*
+
+*	Lead quality improvement efforts by extracting and analyzing data from Athena EMR to obtain health measures
+*	Presented data findings to a clinical services committee of health professionals and administrators
+*	Oversaw that administrative and appointment intake document are complete and accurate
+*	Entered scheduling, financial, and health data into Athena EMR and trained staff on navigating Athena EMR 
+*	Interpreted patient needs, determined financial eligibility, and linked patients with services as a patient registrar
+
+**Office of Health Promotion**
+
+*Campaign Assistant (August 2018- December 2019)*
+
+*	Collaborated in a multidisciplinary team to create data-driven health intervention materials promoting positive norms for health behavior 
+*	Disseminated public health campaign materials to an audience of thousands of undergraduate students
+
+***
+
+# Publications
+
+[Turner, A., Wong, D., Khan, M. D., Driesbach, C., Palmore, M., & Miller, C. Multi-omics approaches to study long noncoding RNA function in atherosclerosis. Front Cardiovasc Med. (2019) 6:9. doi: 10.3389/fcvm.2019.00009]<https://www.frontiersin.org/articles/10.3389/fcvm.2019.00009/full>
+
+***
+
+# Teaching Experience
+
+**Tutor – Epidemiologic Methods 2**
+
+*October 2021- December 2021*
+
+***
+
+# Awards
+
+**Parent’s Fund Internship Grant**
+
+*April 20, 2019*
+
+* Awarded in recognition of completing an unpaid service internship supporting one of the five areas of public concern as defined by the Virginia 2020 Commission
+
+***
+
+# Organizations 
+
+**American Public Health Association**
+
+*April 2021-Present*
+
+**Sustained Dialogue** 
+
+*September 2016-May 2018*
+
+*	Participated in a discussion of viewpoints on social and political issues with a diverse group of students
+
+***

@@ -11,7 +11,7 @@ navbar:
       href: index.html
     - text: "Projects"
       href: projects.html
-    - text: "CV"
+    - text: "Resume"
       href: cv.html
     - icon: fa fa-github
       href: https://github.com/mpalmore
