@@ -3155,11 +3155,408 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
 </div>
 <p>Fit the weighted univariate models and store the results. We are calculating the change in log prevalence odds of daytime sleepiness, our outcome, among levels of the “exposures”. Our exposures of interest are sex, age groups, income, smoking, race/ethnicity, any activity, high caffeine intake, BMI categories, heavy drinking, and ordinal depression scores. Log-binomial regression is used to estimate crude associations.</p>
 <div class="layout-chunk" data-layout="l-body">
-
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>model_1w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>RIAGENDR</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_2w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>ageCat_18</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_3w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>INDFMPIR</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_4w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>SMQ681</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_5w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>raceEthCat</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_6w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>activity</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_7w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>hi_caffeine</span>, design<span class='op'>=</span><span class='va'>NHANES_MEC</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_8w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>BMI_cat</span>, design<span class='op'>=</span><span class='va'>NHANES_MEC</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_9w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>heavy_drink2</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>model_10w</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svyglm.html'>svyglm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>depress_cat</span>, design<span class='op'>=</span><span class='va'>NHANES</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>quasibinomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
 </div>
-<p>Let’s also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population.</p>
+</div>
 <div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#exponentiated coefficients</span>
 
+<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)    RIAGENDR 
+  0.2048742   1.2206388 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   (Intercept) ageCat_1840-59   ageCat_1860+ 
+     0.3183220      0.7924395      0.8044204 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)    INDFMPIR 
+  0.3767510   0.9118087 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)      SMQ681 
+  0.4012766   0.8151968 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                (Intercept)          raceEthCatNH Black 
+                  0.3024167                   0.8091614 
+         raceEthCatNH Asian          raceEthCatHispanic 
+                  0.4615732                   0.7857788 
+raceEthCatNH Other/Multiple 
+                  1.2061075 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)    activity 
+  0.2791679   0.9971760 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept) hi_caffeine 
+  0.2679387   1.4338962 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>       (Intercept) BMI_catunderweight  BMI_catoverweight 
+         0.2221463          1.2402763          1.0529336 
+      BMI_catobese 
+         1.5503832 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> (Intercept) heavy_drink2 
+   0.2525171    1.2794627 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>$</span><span class='va'>coefficients</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  (Intercept) depress_cat.L depress_cat.Q depress_cat.C depress_cat^4 
+    0.4645206     2.2088022     0.5980783     1.2557422     0.9903052 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># p-values</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ RIAGENDR, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.58536    0.15227 -10.412 5.65e-08 ***
+RIAGENDR     0.19937    0.08474   2.353   0.0338 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ ageCat_18, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)    -1.14469    0.05047 -22.680 7.73e-12 ***
+ageCat_1840-59 -0.23264    0.06337  -3.671  0.00282 ** 
+ageCat_1860+   -0.21763    0.07092  -3.069  0.00897 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ INDFMPIR, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.97617    0.08189 -11.920 1.02e-08 ***
+INDFMPIR    -0.09233    0.01919  -4.811 0.000277 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.026985)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ SMQ681, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -0.91310    0.12122  -7.532 2.74e-06 ***
+SMQ681      -0.20433    0.05779  -3.535  0.00329 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.0229)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ raceEthCat, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+                            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)                 -1.19595    0.04884 -24.490 6.03e-11 ***
+raceEthCatNH Black          -0.21176    0.07694  -2.752   0.0188 *  
+raceEthCatNH Asian          -0.77311    0.09487  -8.149 5.48e-06 ***
+raceEthCatHispanic          -0.24108    0.10810  -2.230   0.0475 *  
+raceEthCatNH Other/Multiple  0.18740    0.13200   1.420   0.1834    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000171)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ activity, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.275942   0.059430 -21.470  4.1e-12 ***
+activity    -0.002828   0.068327  -0.041    0.968    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.000872)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ hi_caffeine, design = NHANES_MEC, 
+    family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all_MEC, inAnalysis == 1)
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -1.31700    0.03985 -33.050 1.09e-14 ***
+hi_caffeine  0.36040    0.12757   2.825   0.0135 *  
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.104844)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ BMI_cat, design = NHANES_MEC, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all_MEC, inAnalysis == 1)
+
+Coefficients:
+                   Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)        -1.50442    0.07922 -18.991 2.55e-10 ***
+BMI_catunderweight  0.21533    0.28243   0.762 0.460528    
+BMI_catoverweight   0.05158    0.13810   0.374 0.715285    
+BMI_catobese        0.43850    0.10153   4.319 0.000998 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.064164)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ heavy_drink2, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  -1.37628    0.06028 -22.830 1.78e-12 ***
+heavy_drink2  0.24644    0.05956   4.138  0.00101 ** 
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.022591)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+svyglm(formula = day_sleep ~ depress_cat, design = NHANES, family = quasibinomial(link = &quot;log&quot;))
+
+Survey design:
+subset(NHANES_all, inAnalysis == 1)
+
+Coefficients:
+               Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)   -0.766749   0.059637 -12.857 5.71e-08 ***
+depress_cat.L  0.792450   0.105804   7.490 1.22e-05 ***
+depress_cat.Q -0.514034   0.093152  -5.518 0.000181 ***
+depress_cat.C  0.227727   0.075092   3.033 0.011395 *  
+depress_cat^4 -0.009742   0.075368  -0.129 0.899485    
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+(Dispersion parameter for quasibinomial family taken to be 1.026629)
+
+Number of Fisher Scoring iterations: 6</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#confidence intervals</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_1w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                2.5 %    97.5 %
+(Intercept) 0.1477932 0.2840011
+RIAGENDR    1.0177826 1.4639265</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_2w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                   2.5 %    97.5 %
+(Intercept)    0.2854385 0.3549939
+ageCat_1840-59 0.6910498 0.9087050
+ageCat_1860+   0.6901471 0.9376148</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_3w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                2.5 %    97.5 %
+(Intercept) 0.3160633 0.4490912
+INDFMPIR    0.8750411 0.9501211</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_4w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                2.5 %    97.5 %
+(Intercept) 0.3094055 0.5204269
+SMQ681      0.7201610 0.9227741</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_5w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                                2.5 %    97.5 %
+(Intercept)                 0.2715973 0.3367333
+raceEthCatNH Black          0.6831119 0.9584698
+raceEthCatNH Asian          0.3745883 0.5687572
+raceEthCatHispanic          0.6193948 0.9968574
+raceEthCatNH Other/Multiple 0.9020059 1.6127337</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_6w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                2.5 %   97.5 %
+(Intercept) 0.2457586 0.317119
+activity    0.8612465 1.154559</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_7w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                2.5 %    97.5 %
+(Intercept) 0.2459903 0.2918454
+hi_caffeine 1.0906713 1.8851310</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_8w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                       2.5 %    97.5 %
+(Intercept)        0.1869307 0.2639961
+BMI_catunderweight 0.6702992 2.2949234
+BMI_catoverweight  0.7793414 1.4225720
+BMI_catobese       1.2427144 1.9342241</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_9w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                 2.5 %    97.5 %
+(Intercept)  0.2218905 0.2873711
+heavy_drink2 1.1260268 1.4538061</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>model_10w</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                  2.5 %    97.5 %
+(Intercept)   0.4073797 0.5296763
+depress_cat.L 1.7499334 2.7879959
+depress_cat.Q 0.4872101 0.7341754
+depress_cat.C 1.0644425 1.4814219
+depress_cat^4 0.8389312 1.1689926</code></pre>
+</div>
+<p>Let’s also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population. We will store the results and diplay them in a table in the results section.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># fit the unweighted models and store the results</span>
+
+<span class='va'>model_1u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>RIAGENDR</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_2u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>ageCat_18</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_3u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>INDFMPIR</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_4u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>SMQ681</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_5u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>raceEthCat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_6u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>activity</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_7u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>hi_caffeine</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_8u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>BMI_cat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_9u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>heavy_drink2</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+<span class='va'>model_10u</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>day_sleep</span><span class='op'>~</span><span class='va'>depress_cat</span>, family<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>unweighted_data</span><span class='op'>)</span>
+</code></pre>
+</div>
 </div>
 <h4 id="part-c-fit-initial-mlr-using-all-predictors">Part c: Fit initial MLR using all predictors</h4>
 <p>Multivariable Poisson regression with robust standard errors will be used to estimate adjusted prevalence ratios. Unweighted multivariable candidate models were selected in 4 ways:</p>
@@ -4301,12 +4698,12 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="xtachonyrk" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="bvjskpzird" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#xtachonyrk .gt_table {
+#bvjskpzird .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -4331,7 +4728,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_heading {
+#bvjskpzird .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4343,7 +4740,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_title {
+#bvjskpzird .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4353,7 +4750,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-width: 0;
 }
 
-#xtachonyrk .gt_subtitle {
+#bvjskpzird .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4363,13 +4760,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-width: 0;
 }
 
-#xtachonyrk .gt_bottom_border {
+#bvjskpzird .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_col_headings {
+#bvjskpzird .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4384,7 +4781,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_col_heading {
+#bvjskpzird .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4404,7 +4801,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#xtachonyrk .gt_column_spanner_outer {
+#bvjskpzird .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4416,15 +4813,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 4px;
 }
 
-#xtachonyrk .gt_column_spanner_outer:first-child {
+#bvjskpzird .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#xtachonyrk .gt_column_spanner_outer:last-child {
+#bvjskpzird .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#xtachonyrk .gt_column_spanner {
+#bvjskpzird .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4436,7 +4833,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   width: 100%;
 }
 
-#xtachonyrk .gt_group_heading {
+#bvjskpzird .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4458,7 +4855,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#xtachonyrk .gt_empty_group_heading {
+#bvjskpzird .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4473,15 +4870,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#xtachonyrk .gt_from_md > :first-child {
+#bvjskpzird .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#xtachonyrk .gt_from_md > :last-child {
+#bvjskpzird .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#xtachonyrk .gt_row {
+#bvjskpzird .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4500,7 +4897,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#xtachonyrk .gt_stub {
+#bvjskpzird .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4512,7 +4909,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-left: 12px;
 }
 
-#xtachonyrk .gt_summary_row {
+#bvjskpzird .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4522,7 +4919,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#xtachonyrk .gt_first_summary_row {
+#bvjskpzird .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4532,7 +4929,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_grand_summary_row {
+#bvjskpzird .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4542,7 +4939,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#xtachonyrk .gt_first_grand_summary_row {
+#bvjskpzird .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4552,11 +4949,11 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_striped {
+#bvjskpzird .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#xtachonyrk .gt_table_body {
+#bvjskpzird .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4565,7 +4962,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_footnotes {
+#bvjskpzird .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4579,13 +4976,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_footnote {
+#bvjskpzird .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#xtachonyrk .gt_sourcenotes {
+#bvjskpzird .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4599,41 +4996,41 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#xtachonyrk .gt_sourcenote {
+#bvjskpzird .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#xtachonyrk .gt_left {
+#bvjskpzird .gt_left {
   text-align: left;
 }
 
-#xtachonyrk .gt_center {
+#bvjskpzird .gt_center {
   text-align: center;
 }
 
-#xtachonyrk .gt_right {
+#bvjskpzird .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#xtachonyrk .gt_font_normal {
+#bvjskpzird .gt_font_normal {
   font-weight: normal;
 }
 
-#xtachonyrk .gt_font_bold {
+#bvjskpzird .gt_font_bold {
   font-weight: bold;
 }
 
-#xtachonyrk .gt_font_italic {
+#bvjskpzird .gt_font_italic {
   font-style: italic;
 }
 
-#xtachonyrk .gt_super {
+#bvjskpzird .gt_super {
   font-size: 65%;
 }
 
-#xtachonyrk .gt_footnote_marks {
+#bvjskpzird .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -4854,12 +5251,12 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> 
 </code></pre>
 </div>
-<div id="czynrhbfir" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="ggbleycrar" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#czynrhbfir .gt_table {
+#ggbleycrar .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -4884,7 +5281,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_heading {
+#ggbleycrar .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4896,7 +5293,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_title {
+#ggbleycrar .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4906,7 +5303,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-width: 0;
 }
 
-#czynrhbfir .gt_subtitle {
+#ggbleycrar .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4916,13 +5313,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-width: 0;
 }
 
-#czynrhbfir .gt_bottom_border {
+#ggbleycrar .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_col_headings {
+#ggbleycrar .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4937,7 +5334,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_col_heading {
+#ggbleycrar .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4957,7 +5354,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#czynrhbfir .gt_column_spanner_outer {
+#ggbleycrar .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4969,15 +5366,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 4px;
 }
 
-#czynrhbfir .gt_column_spanner_outer:first-child {
+#ggbleycrar .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#czynrhbfir .gt_column_spanner_outer:last-child {
+#ggbleycrar .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#czynrhbfir .gt_column_spanner {
+#ggbleycrar .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4989,7 +5386,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   width: 100%;
 }
 
-#czynrhbfir .gt_group_heading {
+#ggbleycrar .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5011,7 +5408,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#czynrhbfir .gt_empty_group_heading {
+#ggbleycrar .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5026,15 +5423,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#czynrhbfir .gt_from_md > :first-child {
+#ggbleycrar .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#czynrhbfir .gt_from_md > :last-child {
+#ggbleycrar .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#czynrhbfir .gt_row {
+#ggbleycrar .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5053,7 +5450,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#czynrhbfir .gt_stub {
+#ggbleycrar .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5065,7 +5462,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-left: 12px;
 }
 
-#czynrhbfir .gt_summary_row {
+#ggbleycrar .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5075,7 +5472,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#czynrhbfir .gt_first_summary_row {
+#ggbleycrar .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5085,7 +5482,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_grand_summary_row {
+#ggbleycrar .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5095,7 +5492,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#czynrhbfir .gt_first_grand_summary_row {
+#ggbleycrar .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5105,11 +5502,11 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_striped {
+#ggbleycrar .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#czynrhbfir .gt_table_body {
+#ggbleycrar .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5118,7 +5515,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_footnotes {
+#ggbleycrar .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5132,13 +5529,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_footnote {
+#ggbleycrar .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#czynrhbfir .gt_sourcenotes {
+#ggbleycrar .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5152,41 +5549,41 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#czynrhbfir .gt_sourcenote {
+#ggbleycrar .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#czynrhbfir .gt_left {
+#ggbleycrar .gt_left {
   text-align: left;
 }
 
-#czynrhbfir .gt_center {
+#ggbleycrar .gt_center {
   text-align: center;
 }
 
-#czynrhbfir .gt_right {
+#ggbleycrar .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#czynrhbfir .gt_font_normal {
+#ggbleycrar .gt_font_normal {
   font-weight: normal;
 }
 
-#czynrhbfir .gt_font_bold {
+#ggbleycrar .gt_font_bold {
   font-weight: bold;
 }
 
-#czynrhbfir .gt_font_italic {
+#ggbleycrar .gt_font_italic {
   font-style: italic;
 }
 
-#czynrhbfir .gt_super {
+#ggbleycrar .gt_super {
   font-size: 65%;
 }
 
-#czynrhbfir .gt_footnote_marks {
+#ggbleycrar .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
@@ -5349,7 +5746,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
 <p>Conflicting results emphasize the need for more research is needed to uncover the links between age, race, alcohol use, tobacco smoking and exercise on sleep quality</p>
 <p>High daily caffeine consumption is a modifiable risk factor that could play a role in causing excessive sleepiness during the day.</p>
 <p>Based on these results and the results of previous research, it may be clinically advisable to address sleep hygiene in people with depression and obesity to prevent future morbidity and mortality.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

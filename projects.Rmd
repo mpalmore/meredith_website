@@ -546,7 +546,7 @@ NHANES_MEC <- subset(NHANES_all_MEC, inAnalysis==1)
 
 Fit the weighted univariate models and store the results. We are calculating the change in log prevalence odds of daytime sleepiness, our outcome, among levels of the "exposures". Our exposures of interest are sex, age groups, income, smoking, race/ethnicity, any activity, high caffeine intake, BMI categories, heavy drinking, and ordinal depression scores. Log-binomial regression is used to estimate crude associations.
 
-```{r echo=FALSE}
+```{r echo = T, results = 'hide'}
 
 model_1w <- svyglm(day_sleep~RIAGENDR, design=NHANES, family=quasibinomial(link="log"))
 model_2w <- svyglm(day_sleep~ageCat_18, design=NHANES, family=quasibinomial(link="log"))
@@ -561,7 +561,7 @@ model_10w <- svyglm(day_sleep~depress_cat, design=NHANES, family=quasibinomial(l
 
 ```
 
-```{r eval=FALSE, include=FALSE}
+```{r}
 #exponentiated coefficients
 
 exp(model_1w$coefficients)
@@ -601,9 +601,9 @@ exp(confint(model_10w))
 ```
 
 
-Let's also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population. 
+Let's also look at the univariate associations in unweighted models. We expect a change in the standard errors. It will not be as representative of the US population. We will store the results and diplay them in a table in the results section. 
 
-```{r, echo=FALSE}
+```{r, echo = T, results = 'hide'}
 
 # fit the unweighted models and store the results
 
@@ -620,7 +620,7 @@ model_10u <- glm(day_sleep~depress_cat, family=binomial(link="log"), data = unwe
 
 ```
 
-```{r include=FALSE}
+```{r, include=FALSE}
 
 #exponentiated coefficients
 
