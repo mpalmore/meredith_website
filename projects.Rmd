@@ -12,6 +12,455 @@ output:
 #knitr::opts_chunk$set(echo = FALSE)
 ```
 
+## Developing a placental epigenetic risk score for maternal BMI
+
+**By Meredith Palmore, epigenetic risk score adapted from Ellen Howerton**
+
+### Background
+
+Maternal body mass index (BMI) is a known risk factor of child health outcomes, such as childhood obesity. Studies have found single-site epigenetic loci that are associated with maternal pre-pregnancy BMI. I aim to summarize the impact of maternal BMI on the fetal side of the placental epigenome in an epigenetic risk score.
+
+#### Description: 
+
+This function and following code show the DNA methylation scoring procedure for difference in M-value in placental tissue, comparing mothers with different BMI categories. The main scoring procedure is in the function, and then after all scoring is completed, the performance is evaluated and the results are plotted. 
+
+#### Some notes on the epigenetic risk score:
+
+One of my colleagues, Ellen Howerton, kindly provided me with the function for the epigenetic risk score. I have modified it to work with categorical variables with multiple levels.
+
+* toppg_11 are the summary statistics derived from limma's topTable() (rownames are CpG sites, column names are effect size of logFC, P.Value, etc.)
+
+* The M-value matrix in this example is named M_regress absmeans are the average of the absolute value of effect sizes.
+ 
+* Here, I have included one variable to score, bmi category, as well as scoring by p-value threshold, but it could be modified to be multiple variables and a CpG list to be more generalizable.
+
+* As Ellen has written it here, the variable name should be in quotes
+
+### Step 1: Wrangling the Data
+
+
+#### Part 1. Load packages 
+
+```{r load, echo=TRUE, message=FALSE, warning=FALSE}
+
+library(tidyverse)
+library(data.table)
+library(reshape2)
+library(here)
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+#BiocManager::install("IlluminaHumanMethylation450kanno.ilmn12.hg19")
+
+library(IlluminaHumanMethylation450kanno.ilmn12.hg19)
+library(methyland) #A package for imputation that I made myself! It requires the Annotation file loaded above.
+library(fmsb)
+library(pROC)
+library(readxl)
+```
+
+#### Part 2. Load in my M-value matrix and summary statistics
+
+
+**A couple of notes about the methylation data:**
+
+
+Here is a link to the study from which I derived summary statistics:
+<https://pubmed.ncbi.nlm.nih.gov/32071425/>
+
+Here is a link to the study where I derived my GEO dataset:
+<http://dx.doi.org/10.1080/15592294.2016.1195534>
+
+
+Both the summary statistics and methylation data are measured from placental tissue on the 450K methylation array. 
+
+Summary statistics were derived from linear models adjusted for surrogate variables as proxy for placenta cellular heterogeneity, SNP-based ancestry principal components, methylation principal components, maternal age, race and ethnicity, offspring sex,and sequencing batches. 
+
+Load in the data. There are multiple files for the summary statistics becaues they were converted from a pdf file.
+
+```{r data}
+#My top_11 frame (it's not a limma object, it's loaded in as a .csv)
+
+setwd("C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data/Summ_stats_BMI/")
+
+temp = list.files(pattern="*.csv")
+myfiles = lapply(temp, read.csv)
+
+for(i in 1:length(myfiles)){colnames(myfiles[[i]]) <- c("CpGs", "chrom", "logFC", "p-value", "direction")} 
+
+
+top_11 <- myfiles %>% bind_rows()
+
+head(top_11)
+
+top_11 <- as_tibble(top_11)
+
+# Any missing data?
+pMiss <- function(x){sum(is.na(x))/length(x)*100}
+
+apply(top_11,2,pMiss)
+
+# One logFC value missing, remove
+top_11 <- top_11[-c(which(is.na(top_11$logFC))),]
+
+# Make all of the columns numeric
+colnames(top_11)
+
+top_11$logFC <- as.numeric(top_11$logFC)
+top_11$`p-value` <- as.numeric(top_11$`p-value`)
+
+
+## My M-matrix:
+
+setwd("C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data")
+load("Mval_Matrix.rda")
+
+dim(M_regress)
+
+```
+
+#### Part 3. Subset matrix to probes that transfer from the EPIC to 450K array
+
+The methylation matrix from GEO is already cleaned. However, during the cleaning process, the authors filtered out many probes, inclusing ones with little variability in methylation. I need some of the probes that they filtered out.
+
+There are two possible ways that I will deal with the probes that do not transfer:
+Either... 
+
+1. drop them from the analysis
+
+2. find the nearest probes that we have measured and retain those for the score
+
+
+I will try option 2. I wrote a function that will find the nearest probe for which we have methylation data measured, and return a list of those probes. 
+
+I developed an imputation function that finds the nearest probe on the array that is also in our dataset.
+
+```{r option 2}
+
+# # Option 2: Substitute missing with an imputation function I developed
+      missing_fromMatrix <- top_11[which(!top_11$CpGs %in% rownames(M_regress)), 1]
+      missing_fromMatrix <- deframe(missing_fromMatrix)
+      closest_probe <- findSub(missing_fromMatrix, M_regress, annotation= "Illumina450k")
+
+      closest_probe[,1] %in% rownames(M_regress)
+      # All TRUE! :)
+
+      closest_probe
+
+      # Subset M-matrix to these probes (all 50)
+
+        index_scoreprobes <- which(rownames(M_regress) %in% top_11$CpGs)
+        index_imputedprobes <- which(rownames(M_regress) %in% closest_probe[,1])
+
+        index_allprobes <- c(index_scoreprobes, index_imputedprobes)
+
+        M_regress <- M_regress[index_allprobes,]
+
+      #rename the substituted probes in the toptable
+        closest_probe <- tibble::rownames_to_column(as.data.frame(closest_probe), "CpGs")
+
+        top_11 <- left_join(top_11, closest_probe, by="CpGs")
+
+        top_11 <- top_11 %>% mutate(CpGs = ifelse(is.na(Nearest_Probe), CpGs, Nearest_Probe))
+        top_11 %>% select(CpGs, Nearest_Probe)
+
+        # Are there any duplicate probes in our imputed list?
+        all(unique(top_11$CpGs) == top_11$CpGs)
+
+        top_11<- top_11 %>% filter(duplicated(CpGs) == FALSE)
+
+          #Will keep the true (non-imputed) CpG because it has a stronger association and is located closer to the top of the list
+
+```
+
+Now that we have imputed the missing probes with neary ones and updated them in the Methylation matrix and in the top_11 object (summary statistics object), we can proceed with our computation of the score. 
+
+
+For the score, we must find the average absolute value of the logFC, or the log-fold change in methylation for each unit increase in BMI, and save it for later:
+
+
+```{r abs mean}
+top_11$logFC <- as.numeric(top_11$logFC)
+  absmean_pg_11 <- mean(abs(top_11$logFC))
+  absmean_pg_11
+```
+
+
+
+#### Part 4. Select individuals with phenotype information 
+
+
+```{r}
+# Load in phenotype information
+
+load("C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data/Subset_Annotation.rda")
+
+pd <- subset_anno %>%
+  mutate("SampleID" = geo_accession, .before = geo_accession) %>%
+  select(SampleID, bmi)
+
+
+head(pd)
+dim(pd)
+
+# Is there any missing data?
+apply(pd,2,pMiss) # No.
+
+# Divide BMI into categories.
+
+pd$bmi <- as.numeric(pd$bmi)
+
+pd = dplyr::mutate(pd, bmicat = cut(bmi, breaks = c(0,18.5, 25, 30,100), labels = 1:4, ordered = TRUE))
+
+ggplot(pd, aes(bmicat, bmi, fill = bmicat)) + 
+  geom_boxplot() +
+  scale_x_discrete(labels=c("1" = "Underweight", "2" = "Normal",
+                              "3" = "Overweight", "4" = "Obese"))+ 
+  theme(legend.position= "none")
+
+
+hist(pd$bmi) #Very right skewed
+
+ggplot(pd, aes(bmicat)) + 
+  geom_histogram(stat="count", fill = "pink1") +
+  scale_x_discrete(labels=c("1" = "Underweight", "2" = "Normal",
+                              "3" = "Overweight", "4" = "Obese"))
+
+class(pd$bmicat)
+
+#Make sure there are 237 subjects in the sample annotation and the methylation data files.
+
+dim(M_regress)
+dim(pd)
+
+```
+
+
+### Run the epigenetic risk score function
+
+Since the outcome is not binary, the baseline we are comparing to is individuals with 'normal' BMI. So when comparing methylation to the the median value of the "unexposed", the unexposed is individuals with normal BMI. 
+
+```{r episcore}
+score_ts_byM_p <- function(variable, pthresh) {
+  
+  top_11 <- top_11[top_11$`p-value` <= pthresh,]
+  top_11 <- mutate(top_11, CpG_site = CpGs)
+
+  top_11 <- top_11 %>%
+    as_tibble() %>%
+    dplyr::mutate(CpG_site = as.factor(CpG_site)) 
+
+  if(nrow(top_11) == 0) {
+    print(paste0("There are no CpGs that reached significance for p <= ", pthresh, ". Stopping function."))
+    stop()
+  }
+
+  print(paste0("Here are the CpG sites that have a p-value <=  ", pthresh, ":"))
+  print(top_11)
+  fwrite(top_11, file.path(paste0("cpg_list_in_score_", pthresh, "_", variable, ".csv")))
+
+  # prep count name
+  count_name <- paste0("count_", pthresh)
+
+  top_count_t_11 <- top_11 %>%
+     as_tibble() %>%
+     dplyr::mutate(CpG_site = as.factor(CpG_site)) %>%
+    dplyr::summarise(!!count_name := n(), total_CpGs = nrow(top_11))
+  print(top_count_t_11)
+  fwrite(top_count_t_11, file.path(paste0("cpg_count_in_score_", pthresh, "_", variable, ".csv")))
+  # Note: Had to remove the directory specified because I don't have it.
+
+  # subset M-value matrix
+  t_cpg_site_names <- top_11 %>%
+    dplyr::select(CpG_site) %>%
+    dplyr::mutate(CpG_site = as.character(CpG_site)) %>%
+    deframe()
+
+  # subset M-value matrix
+  M_11 <- M_regress[t_cpg_site_names,] %>%
+    t() %>%
+    as.data.frame()
+  print("The dimensions of the M-value object, subsetted by CpG sites of interest:")
+   #print(head(M_11))
+   #print(tail(M_11))
+  print(dim(M_11))
+
+  # bind phenotype information
+  M_inf_11 <- cbind(M_11, pd[ ,c("SampleID","bmicat")])
+  print("The dimensions of the M-value object, with bmi information:")
+   #print(head(M_inf_11))
+   #print(tail(M_inf_11))
+  print(dim(M_inf_11))
+  
+  M_inf_11 <- M_inf_11 %>%
+    dplyr::as_tibble()
+  
+  #print("dimensions of the tibble:")
+  #print(dim(M_inf_11))
+
+  # reshape data to long
+  M_inf_melt_11 <- M_inf_11 %>%
+    #dplyr::as_tibble() %>%
+    melt(id.vars = c("SampleID","bmicat")) %>%
+    #dplyr::as_tibble() %>%
+    dplyr::rename(CpG_site = variable) %>%
+    dplyr::rename(M_value = value) 
+  
+  top_11$CpG_site <- as.character(top_11$CpG_site)
+  M_inf_melt_11$CpG_site <- as.character(M_inf_melt_11$CpG_site)
+  
+  M_inf_melt_11 <- M_inf_melt_11 %>%
+    dplyr::left_join(top_11, by = "CpG_site")
+  
+  print("The 'melted' M-value object, with bmi information:")
+  print(summary(M_inf_melt_11))
+  
+  
+
+  # empty median M value tibble
+  med_M <- tibble(CpG_site = factor(),
+                  #timeframe = factor(),
+                  med_M_unexp = numeric())
+  print("Check (empty) median M value tibble:")
+  print(med_M)
+
+  #Ellen says:
+  # for loop to add in median M value for unexposed for each CpG and time period
+  # don't need this level of row-by-row detail as they should all be the same tf, but didn't want to change something that worked from my earlier function
+
+  # Meredith says:
+  # For me, I don't even have time periods so I'm modifying:
+  
+  pd$bmicat <- as.numeric(pd$bmicat)
+  
+  top_11$CpG_site <- as.factor(top_11$CpG_site)
+
+  for(i in seq_along(levels(top_11$CpG_site))) {
+
+    i_nm <- top_11$CpG_site[[i]]
+
+       row_M <- M_inf_melt_11 %>%
+         dplyr::mutate(CpG_site = as.factor(CpG_site)) %>%
+         dplyr::filter(CpG_site == i_nm & bmicat == 2) %>%
+         dplyr::summarize(CpG_site, med_M_unexp = median(M_value)) %>%
+         distinct()
+       med_M <- bind_rows(med_M, row_M)
+  }
+
+   print("Here is the median M-value of normal BMI (reference group) for all CpGs in the score:")
+   print(med_M)
+
+  # join the median unexposed to the melt score object
+  M_inf_melt_med <- dplyr::left_join(M_inf_melt_11, med_M, by = "CpG_site")
+  # print(M_inf_melt_med)
+
+  print("Check that median values joined correctly:")
+  print(summary(M_inf_melt_med))
+
+  # prep names for score columns
+  score_name <- paste0("score_", pthresh)
+  score_name <- gsub("e-", "E_", score_name)
+
+  # score!
+  M_inf_melt_score <- M_inf_melt_med %>%
+    dplyr::mutate(score_cpg  = (logFC / absmean_pg_11) * (M_value - med_M_unexp)) %>%
+    dplyr::group_by(SampleID) %>%
+    dplyr::mutate(!!score_name := sum(score_cpg))
+
+  print(paste0("Scores are complete for the variable: ", variable, " and the p-value threshold of: ", pthresh))
+
+  # make more mergeable
+  M_inf_melt_score %>%
+    dplyr::select(SampleID, bmicat, !!score_name) %>%
+    distinct()
+
+}
+
+```
+
+
+### Results
+
+#### Part 1. Make functions for results tables and graphs 
+
+Now that we have computed the scores, we can make functions for the results. 
+
+Functions make my code look nicer and more concise to have graphs summarizing the results from the risk score calculations. 
+
+```{r graphs}
+
+
+
+gress_graph <- function(score){
+  
+  indv_scores <- as.matrix(score[,3])
+  
+  score$bmicat <- factor(score$bmicat, ordered = FALSE)
+  score$bmicat <- relevel(score$bmicat, ref = 2)
+  
+  mod <- lm(indv_scores ~ bmicat, data = score)
+  mean_change <- coef(mod)
+  conf <- confint(mod)
+  print(mean_change)
+  print(conf)
+  print(summary(mod)$r.squared)
+  print(aic(mod))
+  # print(NagelkerkeR2(mod))
+  #indv_scores <- as.vector(indv_scores)
+  #print(auc(bmicat ~ indv_scores, data = score))
+  
+  
+
+   ggplot(score, aes(x = bmicat, y = indv_scores)) +
+     geom_violin() +
+     geom_point(alpha=0.5) #+
+     #labs(title = paste0(colnames(score)[3],";"," Mean change in score = ", round(mean_change[2],2), " C.I. (",round(conf[2,1],2), ",", round(conf[2,2],2),")"),
+#          )
+    
+}
+
+```
+
+
+
+
+#### Part 2. Display the results 
+
+
+```{r results}
+
+M_score_pg_1E_03 <- score_ts_byM_p("bmicat", 1*10^-3)
+  gress_graph(M_score_pg_1E_03)
+
+M_score_pg_1E_02 <- score_ts_byM_p("bmicat", 1*10^-2)
+  gress_graph(M_score_pg_1E_02)
+
+M_score_pg_1E_01 <- score_ts_byM_p("bmicat", 1*10^-1)
+  gress_graph(M_score_pg_1E_01)
+```
+
+
+### Discussion of the results
+
+The model with the most stringent pruning threshold has the best discrimination, with an $R^{2}$ of 2.0%. Additionally, since only 2 methylation loci were included, it was the most parsimonious model as well, with an AIC of just 91.24. 
+
+Additionally, the effect estimates are fairly intuitive. Children with mothers with "normal" and "overweight" BMIs have comparable slight decrease in epigenetic risk, whereas those who were underweight had highest risk and those who were obese had the second highest risk. This makes intuitive sense given the risk 
+
+**Limitations:** 
+
+* Did not adjust for confounding factors in the validation set, but the effect estimates included in the risk score itself should be un-confounded, assuming the study where the summary statistics came from properly accounted for confounding. I think this is a fair assumption. Their quality control procedures were quite comprehensive!
+
+* Did not account for global differences in methylation, just single site changes. The normalization steps in the publicly available studies may have diluted global changes.
+
+
+**Future perspectives:**
+
+* How much does the epigenetic risk score explain independently when included in a model with other covariates?
+
+* How is the risk score associated with child health outcomes?
+
+***
 
 ## Behavioral Risk Factors of Excessive Daytime Sleepiness in NHANES 2017-18
 

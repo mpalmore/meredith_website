@@ -2465,22 +2465,950 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#behavioral-risk-factors-of-excessive-daytime-sleepiness-in-nhanes-2017-18">Behavioral Risk Factors of Excessive Daytime Sleepiness in NHANES 2017-18</a>
+<li><a href="#developing-a-placental-epigenetic-risk-score-for-maternal-bmi">Developing a placental epigenetic risk score for maternal BMI</a>
 <ul>
 <li><a href="#background">Background</a></li>
+<li><a href="#step-1-wrangling-the-data">Step 1: Wrangling the Data</a></li>
+<li><a href="#run-the-epigenetic-risk-score-function">Run the epigenetic risk score function</a></li>
+<li><a href="#results">Results</a></li>
+<li><a href="#discussion-of-the-results">Discussion of the results</a></li>
+</ul></li>
+<li><a href="#behavioral-risk-factors-of-excessive-daytime-sleepiness-in-nhanes-2017-18">Behavioral Risk Factors of Excessive Daytime Sleepiness in NHANES 2017-18</a>
+<ul>
+<li><a href="#background-1">Background</a></li>
 <li><a href="#study-design">Study Design</a></li>
 <li><a href="#data">Data</a></li>
 <li><a href="#wrangling-the-data">Wrangling the data</a></li>
 <li><a href="#correcting-for-missingness">Correcting for missingness</a></li>
 <li><a href="#statistical-methods">Statistical Methods</a></li>
-<li><a href="#results">Results</a></li>
+<li><a href="#results-1">Results</a></li>
 <li><a href="#conclusions-and-future-directions">Conclusions and future directions</a></li>
 </ul></li>
 </ul>
 </nav>
 </div>
-<h2 id="behavioral-risk-factors-of-excessive-daytime-sleepiness-in-nhanes-2017-18">Behavioral Risk Factors of Excessive Daytime Sleepiness in NHANES 2017-18</h2>
+<h2 id="developing-a-placental-epigenetic-risk-score-for-maternal-bmi">Developing a placental epigenetic risk score for maternal BMI</h2>
+<p><strong>By Meredith Palmore, epigenetic risk score adapted from Ellen Howerton</strong></p>
 <h3 id="background">Background</h3>
+<p>Maternal body mass index (BMI) is a known risk factor of child health outcomes, such as childhood obesity. Studies have found single-site epigenetic loci that are associated with maternal pre-pregnancy BMI. I aim to summarize the impact of maternal BMI on the fetal side of the placental epigenome in an epigenetic risk score.</p>
+<h4 id="description">Description:</h4>
+<p>This function and following code show the DNA methylation scoring procedure for difference in M-value in placental tissue, comparing mothers with different BMI categories. The main scoring procedure is in the function, and then after all scoring is completed, the performance is evaluated and the results are plotted.</p>
+<h4 id="some-notes-on-the-epigenetic-risk-score">Some notes on the epigenetic risk score:</h4>
+<p>One of my colleagues, Ellen Howerton, kindly provided me with the function for the epigenetic risk score. I have modified it to work with categorical variables with multiple levels.</p>
+<ul>
+<li><p>toppg_11 are the summary statistics derived from limma’s topTable() (rownames are CpG sites, column names are effect size of logFC, P.Value, etc.)</p></li>
+<li><p>The M-value matrix in this example is named M_regress absmeans are the average of the absolute value of effect sizes.</p></li>
+<li><p>Here, I have included one variable to score, bmi category, as well as scoring by p-value threshold, but it could be modified to be multiple variables and a CpG list to be more generalizable.</p></li>
+<li><p>As Ellen has written it here, the variable name should be in quotes</p></li>
+</ul>
+<h3 id="step-1-wrangling-the-data">Step 1: Wrangling the Data</h3>
+<h4 id="part-1.-load-packages">Part 1. Load packages</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/reshape'>reshape2</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/ns-load.html'>requireNamespace</a></span><span class='op'>(</span><span class='st'>"BiocManager"</span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/install.packages.html'>install.packages</a></span><span class='op'>(</span><span class='st'>"BiocManager"</span><span class='op'>)</span>
+
+<span class='co'>#BiocManager::install("IlluminaHumanMethylation450kanno.ilmn12.hg19")</span>
+
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>IlluminaHumanMethylation450kanno.ilmn12.hg19</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>methyland</span><span class='op'>)</span> <span class='co'>#A package for imputation that I made myself! It requires the Annotation file loaded above.</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://minato.sip21c.org/msb/'>fmsb</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://expasy.org/tools/pROC/'>pROC</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://readxl.tidyverse.org'>readxl</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h4 id="part-2.-load-in-my-m-value-matrix-and-summary-statistics">Part 2. Load in my M-value matrix and summary statistics</h4>
+<p><strong>A couple of notes about the methylation data:</strong></p>
+<p>Here is a link to the study from which I derived summary statistics: <a href="https://pubmed.ncbi.nlm.nih.gov/32071425/" class="uri">https://pubmed.ncbi.nlm.nih.gov/32071425/</a></p>
+<p>Here is a link to the study where I derived my GEO dataset: <a href="http://dx.doi.org/10.1080/15592294.2016.1195534" class="uri">http://dx.doi.org/10.1080/15592294.2016.1195534</a></p>
+<p>Both the summary statistics and methylation data are measured from placental tissue on the 450K methylation array.</p>
+<p>Summary statistics were derived from linear models adjusted for surrogate variables as proxy for placenta cellular heterogeneity, SNP-based ancestry principal components, methylation principal components, maternal age, race and ethnicity, offspring sex,and sequencing batches.</p>
+<p>Load in the data. There are multiple files for the summary statistics becaues they were converted from a pdf file.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#My top_11 frame (it's not a limma object, it's loaded in as a .csv)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>"C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data/Summ_stats_BMI/"</span><span class='op'>)</span>
+
+<span class='va'>temp</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.files.html'>list.files</a></span><span class='op'>(</span>pattern<span class='op'>=</span><span class='st'>"*.csv"</span><span class='op'>)</span>
+<span class='va'>myfiles</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>temp</span>, <span class='va'>read.csv</span><span class='op'>)</span>
+
+<span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>myfiles</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>myfiles</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"CpGs"</span>, <span class='st'>"chrom"</span>, <span class='st'>"logFC"</span>, <span class='st'>"p-value"</span>, <span class='st'>"direction"</span><span class='op'>)</span><span class='op'>}</span> 
+
+
+<span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='va'>myfiles</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_rows</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>        CpGs chrom        logFC   p-value     direction
+1 cg10143030  chr2  0.004584571 0.2115875 Hypermethylat
+2 cg07848601  chr5  0.009093954 0.2151436 Hypermethylat
+3 cg26466094  chr1 -0.007766493 0.2162056  Hypomethylat
+4 cg16724319  chr2 -0.050483370 0.2181015  Hypomethylat
+5 cg22197787  chr1 -0.003223481 0.2339715  Hypomethylat
+6 cg13266327  chr2  0.004322822 0.2374356 Hypermethylat</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span>
+
+<span class='co'># Any missing data?</span>
+<span class='va'>pMiss</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>/</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>}</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>top_11</span>,<span class='fl'>2</span>,<span class='va'>pMiss</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>      CpGs      chrom      logFC    p-value  direction 
+0.00000000 0.00000000 0.05307856 0.00000000 0.00000000 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># One logFC value missing, remove</span>
+<span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span><span class='op'>[</span><span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,<span class='op'>]</span>
+
+<span class='co'># Make all of the columns numeric</span>
+<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;CpGs&quot;      &quot;chrom&quot;     &quot;logFC&quot;     &quot;p-value&quot;   &quot;direction&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span><span class='op'>)</span>
+<span class='va'>top_11</span><span class='op'>$</span><span class='va'>`p-value`</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>`p-value`</span><span class='op'>)</span>
+
+
+<span class='co'>## My M-matrix:</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/getwd.html'>setwd</a></span><span class='op'>(</span><span class='st'>"C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data"</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"Mval_Matrix.rda"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 336484    237</code></pre>
+</div>
+<h4 id="part-3.-subset-matrix-to-probes-that-transfer-from-the-epic-to-450k-array">Part 3. Subset matrix to probes that transfer from the EPIC to 450K array</h4>
+<p>The methylation matrix from GEO is already cleaned. However, during the cleaning process, the authors filtered out many probes, inclusing ones with little variability in methylation. I need some of the probes that they filtered out.</p>
+<p>There are two possible ways that I will deal with the probes that do not transfer: Either…</p>
+<ol type="1">
+<li><p>drop them from the analysis</p></li>
+<li><p>find the nearest probes that we have measured and retain those for the score</p></li>
+</ol>
+<p>I will try option 2. I wrote a function that will find the nearest probe for which we have methylation data measured, and return a list of those probes.</p>
+<p>I developed an imputation function that finds the nearest probe on the array that is also in our dataset.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># # Option 2: Substitute missing with an imputation function I developed</span>
+      <span class='va'>missing_fromMatrix</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='op'>!</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpGs</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span><span class='op'>)</span>, <span class='fl'>1</span><span class='op'>]</span>
+      <span class='va'>missing_fromMatrix</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/enframe.html'>deframe</a></span><span class='op'>(</span><span class='va'>missing_fromMatrix</span><span class='op'>)</span>
+      <span class='va'>closest_probe</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/methyland/man/findSub.html'>findSub</a></span><span class='op'>(</span><span class='va'>missing_fromMatrix</span>, <span class='va'>M_regress</span>, annotation<span class='op'>=</span> <span class='st'>"Illumina450k"</span><span class='op'>)</span>
+
+      <span class='va'>closest_probe</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [14] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [27] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [40] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [53] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [66] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [79] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ [92] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+[105] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">      <span class='co'># All TRUE! :)</span>
+
+      <span class='va'>closest_probe</span>
+</code></pre>
+</div>
+<pre><code>           Nearest_Probe Distance
+cg13266327 &quot;cg03997139&quot;  &quot;9&quot;     
+cg03393966 &quot;cg10740054&quot;  &quot;11&quot;    
+cg15119377 &quot;cg03518058&quot;  &quot;82&quot;    
+cg20227592 &quot;cg13902024&quot;  &quot;25384&quot; 
+cg10442251 &quot;cg23010629&quot;  &quot;22&quot;    
+cg07708472 &quot;cg19807612&quot;  &quot;50&quot;    
+cg05141289 &quot;cg13165992&quot;  &quot;1363&quot;  
+cg06777321 &quot;cg21582253&quot;  &quot;1843&quot;  
+cg07744751 &quot;cg02413902&quot;  &quot;5&quot;     
+cg11542281 &quot;cg05973498&quot;  &quot;568&quot;   
+cg19816667 &quot;cg22785468&quot;  &quot;188&quot;   
+cg16648524 &quot;cg09314708&quot;  &quot;308&quot;   
+cg09856709 &quot;cg03452190&quot;  &quot;237&quot;   
+cg03535361 &quot;cg03532510&quot;  &quot;74&quot;    
+cg18268562 &quot;cg07780348&quot;  &quot;21&quot;    
+cg05037360 &quot;cg17903306&quot;  &quot;18&quot;    
+cg20801130 &quot;cg22629208&quot;  &quot;295&quot;   
+cg10671380 &quot;cg09424253&quot;  &quot;61&quot;    
+cg15440370 &quot;cg21575584&quot;  &quot;131&quot;   
+cg12225910 &quot;cg12562967&quot;  &quot;100&quot;   
+cg21065401 &quot;cg14080585&quot;  &quot;336&quot;   
+cg26802291 &quot;cg21131022&quot;  &quot;413&quot;   
+cg26783428 &quot;cg15986668&quot;  &quot;61&quot;    
+cg17555714 &quot;cg11045814&quot;  &quot;51&quot;    
+cg26677602 &quot;cg09115705&quot;  &quot;158&quot;   
+cg07864323 &quot;cg08574156&quot;  &quot;213&quot;   
+cg06405978 &quot;cg02085160&quot;  &quot;38&quot;    
+cg26680520 &quot;cg18833573&quot;  &quot;246&quot;   
+cg25390658 &quot;cg04655520&quot;  &quot;23&quot;    
+cg13694800 &quot;cg10604703&quot;  &quot;681&quot;   
+cg12550412 &quot;cg11846112&quot;  &quot;402&quot;   
+cg15427774 &quot;cg11118681&quot;  &quot;108&quot;   
+cg14660676 &quot;cg09984392&quot;  &quot;650&quot;   
+cg24973420 &quot;cg10203523&quot;  &quot;28&quot;    
+cg01067326 &quot;cg14577029&quot;  &quot;452&quot;   
+cg25312229 &quot;cg17392047&quot;  &quot;265&quot;   
+cg15029475 &quot;cg09458384&quot;  &quot;2769&quot;  
+cg01646019 &quot;cg17357797&quot;  &quot;184&quot;   
+cg06082920 &quot;cg22368208&quot;  &quot;378&quot;   
+cg21592521 &quot;cg19181022&quot;  &quot;7856&quot;  
+cg15139248 &quot;cg00155504&quot;  &quot;41&quot;    
+cg01667350 &quot;cg07001414&quot;  &quot;75&quot;    
+cg00258805 &quot;cg12743425&quot;  &quot;484&quot;   
+cg14030674 &quot;cg08923054&quot;  &quot;102&quot;   
+cg23181138 &quot;cg14965947&quot;  &quot;424&quot;   
+cg15804566 &quot;cg09612413&quot;  &quot;125&quot;   
+cg26630773 &quot;cg17415989&quot;  &quot;71&quot;    
+cg01881287 &quot;cg00424276&quot;  &quot;1669&quot;  
+cg02581418 &quot;cg02504457&quot;  &quot;17&quot;    
+cg19762797 &quot;cg05516744&quot;  &quot;91&quot;    
+cg05881436 &quot;cg24826118&quot;  &quot;72&quot;    
+cg15559909 &quot;cg08993582&quot;  &quot;70&quot;    
+cg15393197 &quot;cg17381354&quot;  &quot;1209&quot;  
+cg25521963 &quot;cg10347199&quot;  &quot;8&quot;     
+cg08766469 &quot;cg18538270&quot;  &quot;187&quot;   
+cg08781140 &quot;cg16097357&quot;  &quot;257&quot;   
+cg22604940 &quot;cg16339185&quot;  &quot;116&quot;   
+cg08289937 &quot;cg04772463&quot;  &quot;3000&quot;  
+cg21792144 &quot;cg03538470&quot;  &quot;176&quot;   
+cg21549333 &quot;cg10952910&quot;  &quot;14&quot;    
+cg08139724 &quot;cg16311192&quot;  &quot;18&quot;    
+cg26502194 &quot;cg05664895&quot;  &quot;222&quot;   
+cg24298103 &quot;cg17918830&quot;  &quot;74&quot;    
+cg05187651 &quot;cg09537396&quot;  &quot;485&quot;   
+cg08739651 &quot;cg04677340&quot;  &quot;345&quot;   
+cg05508447 &quot;cg13505011&quot;  &quot;191&quot;   
+cg01783070 &quot;cg19079845&quot;  &quot;15&quot;    
+cg15660630 &quot;cg16973606&quot;  &quot;6&quot;     
+cg20698170 &quot;cg24867180&quot;  &quot;64&quot;    
+cg22013210 &quot;cg01667324&quot;  &quot;118&quot;   
+cg27118278 &quot;cg27550442&quot;  &quot;200&quot;   
+cg24966363 &quot;cg00184457&quot;  &quot;13713&quot; 
+cg04144859 &quot;cg26243623&quot;  &quot;53&quot;    
+cg14184954 &quot;cg27546797&quot;  &quot;36436&quot; 
+cg17680792 &quot;cg20855344&quot;  &quot;369&quot;   
+cg06910299 &quot;cg13117552&quot;  &quot;102&quot;   
+cg17324707 &quot;cg13010990&quot;  &quot;108&quot;   
+cg26364182 &quot;cg10622051&quot;  &quot;18&quot;    
+cg26874367 &quot;cg01737003&quot;  &quot;8409&quot;  
+cg17494855 &quot;cg17864206&quot;  &quot;8&quot;     
+cg18955629 &quot;cg22151713&quot;  &quot;506&quot;   
+cg16761752 &quot;cg02376455&quot;  &quot;29&quot;    
+cg18078958 &quot;cg19476426&quot;  &quot;740&quot;   
+cg10573553 &quot;cg16004390&quot;  &quot;38&quot;    
+cg11392204 &quot;cg23065468&quot;  &quot;124&quot;   
+cg12529868 &quot;cg19611786&quot;  &quot;326&quot;   
+cg11015251 &quot;cg11410718&quot;  &quot;142&quot;   
+cg19416600 &quot;cg19017193&quot;  &quot;214&quot;   
+cg05214453 &quot;cg08128766&quot;  &quot;223&quot;   
+cg03289130 &quot;cg21190381&quot;  &quot;93&quot;    
+cg17798944 &quot;cg00320749&quot;  &quot;82&quot;    
+cg24456592 &quot;cg04657325&quot;  &quot;1568&quot;  
+cg00526953 &quot;cg02494150&quot;  &quot;641&quot;   
+cg00139807 &quot;cg05016401&quot;  &quot;66&quot;    
+cg10029288 &quot;cg00215896&quot;  &quot;15431&quot; 
+cg12009398 &quot;cg05371552&quot;  &quot;292&quot;   
+cg05989312 &quot;cg00509616&quot;  &quot;3196&quot;  
+cg06440065 &quot;cg18504218&quot;  &quot;26&quot;    
+cg26150754 &quot;cg10993459&quot;  &quot;130&quot;   
+cg15074266 &quot;cg23463794&quot;  &quot;5314&quot;  
+cg17333211 &quot;cg02182440&quot;  &quot;31&quot;    
+cg02031326 &quot;cg00478127&quot;  &quot;543&quot;   
+cg00734760 &quot;cg22063269&quot;  &quot;47&quot;    
+cg17377690 &quot;cg12848220&quot;  &quot;16&quot;    
+cg25845783 &quot;cg11638880&quot;  &quot;227&quot;   
+cg00924004 &quot;cg11382529&quot;  &quot;97&quot;    
+cg22670329 &quot;cg02117721&quot;  &quot;346&quot;   
+cg03221837 &quot;cg00010954&quot;  &quot;86&quot;    
+cg05151154 &quot;cg02864757&quot;  &quot;203&quot;   
+cg05590267 &quot;cg26670485&quot;  &quot;36&quot;    
+cg10691726 &quot;cg27542487&quot;  &quot;121&quot;   
+cg27312388 &quot;cg02677946&quot;  &quot;192&quot;   </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">      <span class='co'># Subset M-matrix to these probes (all 50)</span>
+
+        <span class='va'>index_scoreprobes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpGs</span><span class='op'>)</span>
+        <span class='va'>index_imputedprobes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='va'>closest_probe</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span>
+
+        <span class='va'>index_allprobes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>index_scoreprobes</span>, <span class='va'>index_imputedprobes</span><span class='op'>)</span>
+
+        <span class='va'>M_regress</span> <span class='op'>&lt;-</span> <span class='va'>M_regress</span><span class='op'>[</span><span class='va'>index_allprobes</span>,<span class='op'>]</span>
+
+      <span class='co'>#rename the substituted probes in the toptable</span>
+        <span class='va'>closest_probe</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/rownames.html'>rownames_to_column</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>closest_probe</span><span class='op'>)</span>, <span class='st'>"CpGs"</span><span class='op'>)</span>
+
+        <span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>top_11</span>, <span class='va'>closest_probe</span>, by<span class='op'>=</span><span class='st'>"CpGs"</span><span class='op'>)</span>
+
+        <span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>CpGs <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>Nearest_Probe</span><span class='op'>)</span>, <span class='va'>CpGs</span>, <span class='va'>Nearest_Probe</span><span class='op'>)</span><span class='op'>)</span>
+        <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>CpGs</span>, <span class='va'>Nearest_Probe</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1,883 x 2
+   CpGs       Nearest_Probe
+   &lt;chr&gt;      &lt;chr&gt;        
+ 1 cg10143030 &lt;NA&gt;         
+ 2 cg07848601 &lt;NA&gt;         
+ 3 cg26466094 &lt;NA&gt;         
+ 4 cg16724319 &lt;NA&gt;         
+ 5 cg22197787 &lt;NA&gt;         
+ 6 cg03997139 cg03997139   
+ 7 cg10740054 cg10740054   
+ 8 cg20594982 &lt;NA&gt;         
+ 9 cg05638699 &lt;NA&gt;         
+10 cg16274199 &lt;NA&gt;         
+# ... with 1,873 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">        <span class='co'># Are there any duplicate probes in our imputed list?</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/all.html'>all</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/duplicated.html'>unique</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpGs</span><span class='op'>)</span> <span class='op'>==</span> <span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpGs</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] FALSE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">        <span class='va'>top_11</span><span class='op'>&lt;-</span> <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/duplicated.html'>duplicated</a></span><span class='op'>(</span><span class='va'>CpGs</span><span class='op'>)</span> <span class='op'>==</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+          <span class='co'>#Will keep the true (non-imputed) CpG because it has a stronger association and is located closer to the top of the list</span>
+</code></pre>
+</div>
+</div>
+<p>Now that we have imputed the missing probes with neary ones and updated them in the Methylation matrix and in the top_11 object (summary statistics object), we can proceed with our computation of the score.</p>
+<p>For the score, we must find the average absolute value of the logFC, or the log-fold change in methylation for each unit increase in BMI, and save it for later:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span><span class='op'>)</span>
+  <span class='va'>absmean_pg_11</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>logFC</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>absmean_pg_11</span>
+</code></pre>
+</div>
+<pre><code>[1] 0.005470551</code></pre>
+</div>
+<h4 id="part-4.-select-individuals-with-phenotype-information">Part 4. Select individuals with phenotype information</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Load in phenotype information</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"C:/Users/softb/OneDrive - Johns Hopkins/Thesis/Data/Subset_Annotation.rda"</span><span class='op'>)</span>
+
+<span class='va'>pd</span> <span class='op'>&lt;-</span> <span class='va'>subset_anno</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='st'>"SampleID"</span> <span class='op'>=</span> <span class='va'>geo_accession</span>, .before <span class='op'>=</span> <span class='va'>geo_accession</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SampleID</span>, <span class='va'>bmi</span><span class='op'>)</span>
+
+
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>             SampleID      bmi
+GSM1947017 GSM1947017 39.91943
+GSM1947018 GSM1947018 44.05074
+GSM1947019 GSM1947019 19.60968
+GSM1947020 GSM1947020 28.56811
+GSM1947021 GSM1947021 21.31254
+GSM1947023 GSM1947023 39.16633</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 237   2</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Is there any missing data?</span>
+<span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span><span class='op'>(</span><span class='va'>pd</span>,<span class='fl'>2</span>,<span class='va'>pMiss</span><span class='op'>)</span> <span class='co'># No.</span>
+</code></pre>
+</div>
+<pre><code>SampleID      bmi 
+       0        0 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Divide BMI into categories.</span>
+
+<span class='va'>pd</span><span class='op'>$</span><span class='va'>bmi</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>$</span><span class='va'>bmi</span><span class='op'>)</span>
+
+<span class='va'>pd</span> <span class='op'>=</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>pd</span>, bmicat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/cut.html'>cut</a></span><span class='op'>(</span><span class='va'>bmi</span>, breaks <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>,<span class='fl'>18.5</span>, <span class='fl'>25</span>, <span class='fl'>30</span>,<span class='fl'>100</span><span class='op'>)</span>, labels <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, ordered <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>pd</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>bmicat</span>, <span class='va'>bmi</span>, fill <span class='op'>=</span> <span class='va'>bmicat</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_boxplot.html'>geom_boxplot</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Underweight"</span>, <span class='st'>"2"</span> <span class='op'>=</span> <span class='st'>"Normal"</span>,
+                              <span class='st'>"3"</span> <span class='op'>=</span> <span class='st'>"Overweight"</span>, <span class='st'>"4"</span> <span class='op'>=</span> <span class='st'>"Obese"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>legend.position<span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="projects_files/figure-html5/unnamed-chunk-1-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/graphics/hist.html'>hist</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>$</span><span class='va'>bmi</span><span class='op'>)</span> <span class='co'>#Very right skewed</span>
+</code></pre>
+</div>
+<img src="projects_files/figure-html5/unnamed-chunk-1-2.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>pd</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span><span class='va'>bmicat</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_histogram.html'>geom_histogram</a></span><span class='op'>(</span>stat<span class='op'>=</span><span class='st'>"count"</span>, fill <span class='op'>=</span> <span class='st'>"pink1"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_discrete.html'>scale_x_discrete</a></span><span class='op'>(</span>labels<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span> <span class='op'>=</span> <span class='st'>"Underweight"</span>, <span class='st'>"2"</span> <span class='op'>=</span> <span class='st'>"Normal"</span>,
+                              <span class='st'>"3"</span> <span class='op'>=</span> <span class='st'>"Overweight"</span>, <span class='st'>"4"</span> <span class='op'>=</span> <span class='st'>"Obese"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="projects_files/figure-html5/unnamed-chunk-1-3.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>$</span><span class='va'>bmicat</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;ordered&quot; &quot;factor&quot; </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#Make sure there are 237 subjects in the sample annotation and the methylation data files.</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>M_regress</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 1869  237</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 237   3</code></pre>
+</div>
+<h3 id="run-the-epigenetic-risk-score-function">Run the epigenetic risk score function</h3>
+<p>Since the outcome is not binary, the baseline we are comparing to is individuals with ‘normal’ BMI. So when comparing methylation to the the median value of the “unexposed”, the unexposed is individuals with normal BMI.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>score_ts_byM_p</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>variable</span>, <span class='va'>pthresh</span><span class='op'>)</span> <span class='op'>{</span>
+  
+  <span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span><span class='op'>[</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>`p-value`</span> <span class='op'>&lt;=</span> <span class='va'>pthresh</span>,<span class='op'>]</span>
+  <span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>top_11</span>, CpG_site <span class='op'>=</span> <span class='va'>CpGs</span><span class='op'>)</span>
+
+  <span class='va'>top_11</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>CpG_site</span><span class='op'>)</span><span class='op'>)</span> 
+
+  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"There are no CpGs that reached significance for p &lt;= "</span>, <span class='va'>pthresh</span>, <span class='st'>". Stopping function."</span><span class='op'>)</span><span class='op'>)</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='op'>}</span>
+
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Here are the CpG sites that have a p-value &lt;=  "</span>, <span class='va'>pthresh</span>, <span class='st'>":"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span>
+  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fwrite.html'>fwrite</a></span><span class='op'>(</span><span class='va'>top_11</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"cpg_list_in_score_"</span>, <span class='va'>pthresh</span>, <span class='st'>"_"</span>, <span class='va'>variable</span>, <span class='st'>".csv"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># prep count name</span>
+  <span class='va'>count_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"count_"</span>, <span class='va'>pthresh</span><span class='op'>)</span>
+
+  <span class='va'>top_count_t_11</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+     <span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+     <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>CpG_site</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span><span class='op'>!</span><span class='op'>!</span><span class='va'>count_name</span> <span class='op'>:=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/context.html'>n</a></span><span class='op'>(</span><span class='op'>)</span>, total_CpGs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>top_count_t_11</span><span class='op'>)</span>
+  <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fwrite.html'>fwrite</a></span><span class='op'>(</span><span class='va'>top_count_t_11</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"cpg_count_in_score_"</span>, <span class='va'>pthresh</span>, <span class='st'>"_"</span>, <span class='va'>variable</span>, <span class='st'>".csv"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='co'># Note: Had to remove the directory specified because I don't have it.</span>
+
+  <span class='co'># subset M-value matrix</span>
+  <span class='va'>t_cpg_site_names</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>CpG_site</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>CpG_site</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'><a href='https://tibble.tidyverse.org/reference/enframe.html'>deframe</a></span><span class='op'>(</span><span class='op'>)</span>
+
+  <span class='co'># subset M-value matrix</span>
+  <span class='va'>M_11</span> <span class='op'>&lt;-</span> <span class='va'>M_regress</span><span class='op'>[</span><span class='va'>t_cpg_site_names</span>,<span class='op'>]</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"The dimensions of the M-value object, subsetted by CpG sites of interest:"</span><span class='op'>)</span>
+   <span class='co'>#print(head(M_11))</span>
+   <span class='co'>#print(tail(M_11))</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>M_11</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># bind phenotype information</span>
+  <span class='va'>M_inf_11</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>M_11</span>, <span class='va'>pd</span><span class='op'>[</span> ,<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SampleID"</span>,<span class='st'>"bmicat"</span><span class='op'>)</span><span class='op'>]</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"The dimensions of the M-value object, with bmi information:"</span><span class='op'>)</span>
+   <span class='co'>#print(head(M_inf_11))</span>
+   <span class='co'>#print(tail(M_inf_11))</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>M_inf_11</span><span class='op'>)</span><span class='op'>)</span>
+  
+  <span class='va'>M_inf_11</span> <span class='op'>&lt;-</span> <span class='va'>M_inf_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://tibble.tidyverse.org/reference/as_tibble.html'>as_tibble</a></span><span class='op'>(</span><span class='op'>)</span>
+  
+  <span class='co'>#print("dimensions of the tibble:")</span>
+  <span class='co'>#print(dim(M_inf_11))</span>
+
+  <span class='co'># reshape data to long</span>
+  <span class='va'>M_inf_melt_11</span> <span class='op'>&lt;-</span> <span class='va'>M_inf_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='co'>#dplyr::as_tibble() %&gt;%</span>
+    <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/melt.data.table.html'>melt</a></span><span class='op'>(</span>id.vars <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SampleID"</span>,<span class='st'>"bmicat"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='co'>#dplyr::as_tibble() %&gt;%</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='va'>variable</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>M_value <span class='op'>=</span> <span class='va'>value</span><span class='op'>)</span> 
+  
+  <span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span><span class='op'>)</span>
+  <span class='va'>M_inf_melt_11</span><span class='op'>$</span><span class='va'>CpG_site</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>M_inf_melt_11</span><span class='op'>$</span><span class='va'>CpG_site</span><span class='op'>)</span>
+  
+  <span class='va'>M_inf_melt_11</span> <span class='op'>&lt;-</span> <span class='va'>M_inf_melt_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>top_11</span>, by <span class='op'>=</span> <span class='st'>"CpG_site"</span><span class='op'>)</span>
+  
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"The 'melted' M-value object, with bmi information:"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>M_inf_melt_11</span><span class='op'>)</span><span class='op'>)</span>
+  
+  
+
+  <span class='co'># empty median M value tibble</span>
+  <span class='va'>med_M</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='op'>)</span>,
+                  <span class='co'>#timeframe = factor(),</span>
+                  med_M_unexp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>numeric</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"Check (empty) median M value tibble:"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>med_M</span><span class='op'>)</span>
+
+  <span class='co'>#Ellen says:</span>
+  <span class='co'># for loop to add in median M value for unexposed for each CpG and time period</span>
+  <span class='co'># don't need this level of row-by-row detail as they should all be the same tf, but didn't want to change something that worked from my earlier function</span>
+
+  <span class='co'># Meredith says:</span>
+  <span class='co'># For me, I don't even have time periods so I'm modifying:</span>
+  
+  <span class='va'>pd</span><span class='op'>$</span><span class='va'>bmicat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>pd</span><span class='op'>$</span><span class='va'>bmicat</span><span class='op'>)</span>
+  
+  <span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span><span class='op'>)</span>
+
+  <span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+    <span class='va'>i_nm</span> <span class='op'>&lt;-</span> <span class='va'>top_11</span><span class='op'>$</span><span class='va'>CpG_site</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span>
+
+       <span class='va'>row_M</span> <span class='op'>&lt;-</span> <span class='va'>M_inf_melt_11</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+         <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>CpG_site <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>CpG_site</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+         <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>CpG_site</span> <span class='op'>==</span> <span class='va'>i_nm</span> <span class='op'>&amp;</span> <span class='va'>bmicat</span> <span class='op'>==</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+         <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarize</a></span><span class='op'>(</span><span class='va'>CpG_site</span>, med_M_unexp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>M_value</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+         <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='op'>)</span>
+       <span class='va'>med_M</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/bind.html'>bind_rows</a></span><span class='op'>(</span><span class='va'>med_M</span>, <span class='va'>row_M</span><span class='op'>)</span>
+  <span class='op'>}</span>
+
+   <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"Here is the median M-value of normal BMI (reference group) for all CpGs in the score:"</span><span class='op'>)</span>
+   <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>med_M</span><span class='op'>)</span>
+
+  <span class='co'># join the median unexposed to the melt score object</span>
+  <span class='va'>M_inf_melt_med</span> <span class='op'>&lt;-</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>M_inf_melt_11</span>, <span class='va'>med_M</span>, by <span class='op'>=</span> <span class='st'>"CpG_site"</span><span class='op'>)</span>
+  <span class='co'># print(M_inf_melt_med)</span>
+
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='st'>"Check that median values joined correctly:"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>M_inf_melt_med</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># prep names for score columns</span>
+  <span class='va'>score_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"score_"</span>, <span class='va'>pthresh</span><span class='op'>)</span>
+  <span class='va'>score_name</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"e-"</span>, <span class='st'>"E_"</span>, <span class='va'>score_name</span><span class='op'>)</span>
+
+  <span class='co'># score!</span>
+  <span class='va'>M_inf_melt_score</span> <span class='op'>&lt;-</span> <span class='va'>M_inf_melt_med</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>score_cpg  <span class='op'>=</span> <span class='op'>(</span><span class='va'>logFC</span> <span class='op'>/</span> <span class='va'>absmean_pg_11</span><span class='op'>)</span> <span class='op'>*</span> <span class='op'>(</span><span class='va'>M_value</span> <span class='op'>-</span> <span class='va'>med_M_unexp</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>SampleID</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='op'>!</span><span class='op'>!</span><span class='va'>score_name</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>score_cpg</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Scores are complete for the variable: "</span>, <span class='va'>variable</span>, <span class='st'>" and the p-value threshold of: "</span>, <span class='va'>pthresh</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># make more mergeable</span>
+  <span class='va'>M_inf_melt_score</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>SampleID</span>, <span class='va'>bmicat</span>, <span class='op'>!</span><span class='op'>!</span><span class='va'>score_name</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/distinct.html'>distinct</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<h3 id="results">Results</h3>
+<h4 id="part-1.-make-functions-for-results-tables-and-graphs">Part 1. Make functions for results tables and graphs</h4>
+<p>Now that we have computed the scores, we can make functions for the results.</p>
+<p>Functions make my code look nicer and more concise to have graphs summarizing the results from the risk score calculations.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gress_graph</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>score</span><span class='op'>)</span><span class='op'>{</span>
+  
+  <span class='va'>indv_scores</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/as.matrix.html'>as.matrix</a></span><span class='op'>(</span><span class='va'>score</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span>
+  
+  <span class='va'>score</span><span class='op'>$</span><span class='va'>bmicat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>score</span><span class='op'>$</span><span class='va'>bmicat</span>, ordered <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+  <span class='va'>score</span><span class='op'>$</span><span class='va'>bmicat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>score</span><span class='op'>$</span><span class='va'>bmicat</span>, ref <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+  
+  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>indv_scores</span> <span class='op'>~</span> <span class='va'>bmicat</span>, data <span class='op'>=</span> <span class='va'>score</span><span class='op'>)</span>
+  <span class='va'>mean_change</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/coef.html'>coef</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
+  <span class='va'>conf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/confint.html'>confint</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>mean_change</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>conf</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>$</span><span class='va'>r.squared</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='fu'>aic</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='co'># print(NagelkerkeR2(mod))</span>
+  <span class='co'>#indv_scores &lt;- as.vector(indv_scores)</span>
+  <span class='co'>#print(auc(bmicat ~ indv_scores, data = score))</span>
+  
+  
+
+   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='va'>score</span>, <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>bmicat</span>, y <span class='op'>=</span> <span class='va'>indv_scores</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_violin.html'>geom_violin</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+     <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_point.html'>geom_point</a></span><span class='op'>(</span>alpha<span class='op'>=</span><span class='fl'>0.5</span><span class='op'>)</span> <span class='co'>#+</span>
+     <span class='co'>#labs(title = paste0(colnames(score)[3],";"," Mean change in score = ", round(mean_change[2],2), " C.I. (",round(conf[2,1],2), ",", round(conf[2,2],2),")"),</span>
+<span class='co'>#          )</span>
+    
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<h4 id="part-2.-display-the-results">Part 2. Display the results</h4>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>M_score_pg_1E_03</span> <span class='op'>&lt;-</span> <span class='fu'>score_ts_byM_p</span><span class='op'>(</span><span class='st'>"bmicat"</span>, <span class='fl'>1</span><span class='op'>*</span><span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;Here are the CpG sites that have a p-value &lt;=  0.001:&quot;
+# A tibble: 2 x 8
+  CpGs       chrom    logFC `p-value` direction Nearest_Probe Distance
+  &lt;chr&gt;      &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt;   
+1 cg13014558 chr11 -0.00603  0.000503 Hypometh~ &lt;NA&gt;          &lt;NA&gt;    
+2 cg26947572 chr2  -0.0118   0.000723 Hypometh~ &lt;NA&gt;          &lt;NA&gt;    
+# ... with 1 more variable: CpG_site &lt;fct&gt;
+# A tibble: 1 x 2
+  count_0.001 total_CpGs
+        &lt;int&gt;      &lt;int&gt;
+1           2          2
+[1] &quot;The dimensions of the M-value object, subsetted by CpG sites of interest:&quot;
+[1] 237   2
+[1] &quot;The dimensions of the M-value object, with bmi information:&quot;
+[1] 237   4
+[1] &quot;The &#39;melted&#39; M-value object, with bmi information:&quot;
+   SampleID         bmicat    CpG_site            M_value        
+ Length:474         1: 22   Length:474         Min.   :-6.02212  
+ Class :character   2:212   Class :character   1st Qu.:-5.17617  
+ Mode  :character   3:112   Mode  :character   Median :-2.33216  
+                    4:128                      Mean   :-2.53902  
+                                               3rd Qu.: 0.09552  
+                                               Max.   : 0.59106  
+     CpGs              chrom               logFC          
+ Length:474         Length:474         Min.   :-0.011773  
+ Class :character   Class :character   1st Qu.:-0.011773  
+ Mode  :character   Mode  :character   Median :-0.008900  
+                                       Mean   :-0.008900  
+                                       3rd Qu.:-0.006027  
+                                       Max.   :-0.006027  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:474         Length:474        
+ 1st Qu.:0.0005027   Class :character   Class :character  
+ Median :0.0006129   Mode  :character   Mode  :character  
+ Mean   :0.0006129                                        
+ 3rd Qu.:0.0007231                                        
+ Max.   :0.0007231                                        
+   Distance        
+ Length:474        
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+[1] &quot;Check (empty) median M value tibble:&quot;
+# A tibble: 0 x 2
+# ... with 2 variables: CpG_site &lt;fct&gt;, med_M_unexp &lt;dbl&gt;
+[1] &quot;Here is the median M-value of normal BMI (reference group) for all CpGs in the score:&quot;
+# A tibble: 2 x 2
+  CpG_site   med_M_unexp
+  &lt;fct&gt;            &lt;dbl&gt;
+1 cg13014558      0.0825
+2 cg26947572     -5.20  
+[1] &quot;Check that median values joined correctly:&quot;
+   SampleID         bmicat    CpG_site            M_value        
+ Length:474         1: 22   Length:474         Min.   :-6.02212  
+ Class :character   2:212   Class :character   1st Qu.:-5.17617  
+ Mode  :character   3:112   Mode  :character   Median :-2.33216  
+                    4:128                      Mean   :-2.53902  
+                                               3rd Qu.: 0.09552  
+                                               Max.   : 0.59106  
+     CpGs              chrom               logFC          
+ Length:474         Length:474         Min.   :-0.011773  
+ Class :character   Class :character   1st Qu.:-0.011773  
+ Mode  :character   Mode  :character   Median :-0.008900  
+                                       Mean   :-0.008900  
+                                       3rd Qu.:-0.006027  
+                                       Max.   :-0.006027  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:474         Length:474        
+ 1st Qu.:0.0005027   Class :character   Class :character  
+ Median :0.0006129   Mode  :character   Mode  :character  
+ Mean   :0.0006129                                        
+ 3rd Qu.:0.0007231                                        
+ Max.   :0.0007231                                        
+   Distance          med_M_unexp      
+ Length:474         Min.   :-5.19757  
+ Class :character   1st Qu.:-5.19757  
+ Mode  :character   Median :-2.55752  
+                    Mean   :-2.55752  
+                    3rd Qu.: 0.08254  
+                    Max.   : 0.08254  
+[1] &quot;Scores are complete for the variable: bmicat and the p-value threshold of: 0.001&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'>gress_graph</span><span class='op'>(</span><span class='va'>M_score_pg_1E_03</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)     bmicat1     bmicat3     bmicat4 
+-0.02918356  0.08305977 -0.18809819  0.00519048 
+                 2.5 %      97.5 %
+(Intercept) -0.1443039 0.085936813
+bmicat1     -0.2923874 0.458506904
+bmicat3     -0.3838995 0.007703169
+bmicat4     -0.1824328 0.192813739
+[1] 0.01970488
+       lik       infl       vari        aic 
+-42.185102   3.433483   3.336728  91.237169 </code></pre>
+<img src="projects_files/figure-html5/results-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>M_score_pg_1E_02</span> <span class='op'>&lt;-</span> <span class='fu'>score_ts_byM_p</span><span class='op'>(</span><span class='st'>"bmicat"</span>, <span class='fl'>1</span><span class='op'>*</span><span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>2</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;Here are the CpG sites that have a p-value &lt;=  0.01:&quot;
+# A tibble: 53 x 8
+   CpGs     chrom    logFC `p-value` direction  Nearest_Probe Distance
+   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;   
+ 1 cg13014~ chr11 -0.00603  0.000503 Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 2 cg26947~ chr2  -0.0118   0.000723 Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 3 cg05633~ chr2   0.0493   0.00108  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 4 cg01054~ chr12  0.00608  0.00113  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 5 cg12902~ chr1  -0.0327   0.00123  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 6 cg11428~ chr22  0.0128   0.00157  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 7 cg03719~ chr20 -0.0115   0.00160  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 8 cg17492~ chr2  -0.0210   0.00167  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 9 cg13782~ chr14 -0.0133   0.00170  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+10 cg02759~ chr4  -0.0682   0.00172  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+# ... with 43 more rows, and 1 more variable: CpG_site &lt;fct&gt;
+# A tibble: 1 x 2
+  count_0.01 total_CpGs
+       &lt;int&gt;      &lt;int&gt;
+1         53         53
+[1] &quot;The dimensions of the M-value object, subsetted by CpG sites of interest:&quot;
+[1] 237  53
+[1] &quot;The dimensions of the M-value object, with bmi information:&quot;
+[1] 237  55
+[1] &quot;The &#39;melted&#39; M-value object, with bmi information:&quot;
+   SampleID         bmicat     CpG_site            M_value      
+ Length:12561       1: 583   Length:12561       Min.   :-8.691  
+ Class :character   2:5618   Class :character   1st Qu.:-5.480  
+ Mode  :character   3:2968   Mode  :character   Median :-4.998  
+                    4:3392                      Mean   :-3.688  
+                                                3rd Qu.:-2.463  
+                                                Max.   : 5.809  
+     CpGs              chrom               logFC          
+ Length:12561       Length:12561       Min.   :-0.068234  
+ Class :character   Class :character   1st Qu.:-0.014400  
+ Mode  :character   Mode  :character   Median :-0.011544  
+                                       Mean   :-0.004837  
+                                       3rd Qu.: 0.008676  
+                                       Max.   : 0.050861  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:12561       Length:12561      
+ 1st Qu.:0.0021486   Class :character   Class :character  
+ Median :0.0037328   Mode  :character   Mode  :character  
+ Mean   :0.0044511                                        
+ 3rd Qu.:0.0066821                                        
+ Max.   :0.0095655                                        
+   Distance        
+ Length:12561      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+[1] &quot;Check (empty) median M value tibble:&quot;
+# A tibble: 0 x 2
+# ... with 2 variables: CpG_site &lt;fct&gt;, med_M_unexp &lt;dbl&gt;
+[1] &quot;Here is the median M-value of normal BMI (reference group) for all CpGs in the score:&quot;
+# A tibble: 53 x 2
+   CpG_site   med_M_unexp
+   &lt;fct&gt;            &lt;dbl&gt;
+ 1 cg13014558      0.0825
+ 2 cg26947572     -5.20  
+ 3 cg05633391     -5.41  
+ 4 cg01054110      1.95  
+ 5 cg12902497     -5.66  
+ 6 cg11428482     -5.59  
+ 7 cg03719642      2.19  
+ 8 cg17492041     -5.40  
+ 9 cg13782781     -5.06  
+10 cg02759110     -4.22  
+# ... with 43 more rows
+[1] &quot;Check that median values joined correctly:&quot;
+   SampleID         bmicat     CpG_site            M_value      
+ Length:12561       1: 583   Length:12561       Min.   :-8.691  
+ Class :character   2:5618   Class :character   1st Qu.:-5.480  
+ Mode  :character   3:2968   Mode  :character   Median :-4.998  
+                    4:3392                      Mean   :-3.688  
+                                                3rd Qu.:-2.463  
+                                                Max.   : 5.809  
+     CpGs              chrom               logFC          
+ Length:12561       Length:12561       Min.   :-0.068234  
+ Class :character   Class :character   1st Qu.:-0.014400  
+ Mode  :character   Mode  :character   Median :-0.011544  
+                                       Mean   :-0.004837  
+                                       3rd Qu.: 0.008676  
+                                       Max.   : 0.050861  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:12561       Length:12561      
+ 1st Qu.:0.0021486   Class :character   Class :character  
+ Median :0.0037328   Mode  :character   Mode  :character  
+ Mean   :0.0044511                                        
+ 3rd Qu.:0.0066821                                        
+ Max.   :0.0095655                                        
+   Distance          med_M_unexp    
+ Length:12561       Min.   :-6.278  
+ Class :character   1st Qu.:-5.427  
+ Mode  :character   Median :-5.071  
+                    Mean   :-3.704  
+                    3rd Qu.:-2.424  
+                    Max.   : 5.042  
+[1] &quot;Scores are complete for the variable: bmicat and the p-value threshold of: 0.01&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'>gress_graph</span><span class='op'>(</span><span class='va'>M_score_pg_1E_02</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)     bmicat1     bmicat3     bmicat4 
+  -5.477925    2.052503    2.507837    3.408030 
+                 2.5 %     97.5 %
+(Intercept)  -9.974812 -0.9810378
+bmicat1     -12.613392 16.7183980
+bmicat3      -5.140650 10.1563227
+bmicat4      -3.920999 10.7370597
+[1] 0.004094288
+          lik          infl          vari           aic 
+-64335.112821      3.433483      3.336728 128677.092608 </code></pre>
+<img src="projects_files/figure-html5/results-2.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>M_score_pg_1E_01</span> <span class='op'>&lt;-</span> <span class='fu'>score_ts_byM_p</span><span class='op'>(</span><span class='st'>"bmicat"</span>, <span class='fl'>1</span><span class='op'>*</span><span class='fl'>10</span><span class='op'>^</span><span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;Here are the CpG sites that have a p-value &lt;=  0.1:&quot;
+# A tibble: 312 x 8
+   CpGs     chrom    logFC `p-value` direction  Nearest_Probe Distance
+   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;         &lt;chr&gt;   
+ 1 cg13014~ chr11 -0.00603  0.000503 Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 2 cg26947~ chr2  -0.0118   0.000723 Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 3 cg05633~ chr2   0.0493   0.00108  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 4 cg01054~ chr12  0.00608  0.00113  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 5 cg12902~ chr1  -0.0327   0.00123  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 6 cg11428~ chr22  0.0128   0.00157  Hypermeth~ &lt;NA&gt;          &lt;NA&gt;    
+ 7 cg03719~ chr20 -0.0115   0.00160  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 8 cg17492~ chr2  -0.0210   0.00167  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+ 9 cg13782~ chr14 -0.0133   0.00170  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+10 cg02759~ chr4  -0.0682   0.00172  Hypomethy~ &lt;NA&gt;          &lt;NA&gt;    
+# ... with 302 more rows, and 1 more variable: CpG_site &lt;fct&gt;
+# A tibble: 1 x 2
+  count_0.1 total_CpGs
+      &lt;int&gt;      &lt;int&gt;
+1       312        312
+[1] &quot;The dimensions of the M-value object, subsetted by CpG sites of interest:&quot;
+[1] 237 312
+[1] &quot;The dimensions of the M-value object, with bmi information:&quot;
+[1] 237 314
+[1] &quot;The &#39;melted&#39; M-value object, with bmi information:&quot;
+   SampleID         bmicat      CpG_site            M_value      
+ Length:73944       1: 3432   Length:73944       Min.   :-9.173  
+ Class :character   2:33072   Class :character   1st Qu.:-5.479  
+ Mode  :character   3:17472   Mode  :character   Median :-5.011  
+                    4:19968                      Mean   :-3.316  
+                                                 3rd Qu.:-1.815  
+                                                 Max.   : 6.834  
+     CpGs              chrom               logFC          
+ Length:73944       Length:73944       Min.   :-0.068234  
+ Class :character   Class :character   1st Qu.:-0.011853  
+ Mode  :character   Mode  :character   Median :-0.007394  
+                                       Mean   :-0.003419  
+                                       3rd Qu.: 0.007900  
+                                       Max.   : 0.050861  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:73944       Length:73944      
+ 1st Qu.:0.0168901   Class :character   Class :character  
+ Median :0.0394770   Mode  :character   Mode  :character  
+ Mean   :0.0439951                                        
+ 3rd Qu.:0.0709698                                        
+ Max.   :0.0995257                                        
+   Distance        
+ Length:73944      
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   
+[1] &quot;Check (empty) median M value tibble:&quot;
+# A tibble: 0 x 2
+# ... with 2 variables: CpG_site &lt;fct&gt;, med_M_unexp &lt;dbl&gt;
+[1] &quot;Here is the median M-value of normal BMI (reference group) for all CpGs in the score:&quot;
+# A tibble: 312 x 2
+   CpG_site   med_M_unexp
+   &lt;fct&gt;            &lt;dbl&gt;
+ 1 cg13014558      0.0825
+ 2 cg26947572     -5.20  
+ 3 cg05633391     -5.41  
+ 4 cg01054110      1.95  
+ 5 cg12902497     -5.66  
+ 6 cg11428482     -5.59  
+ 7 cg03719642      2.19  
+ 8 cg17492041     -5.40  
+ 9 cg13782781     -5.06  
+10 cg02759110     -4.22  
+# ... with 302 more rows
+[1] &quot;Check that median values joined correctly:&quot;
+   SampleID         bmicat      CpG_site            M_value      
+ Length:73944       1: 3432   Length:73944       Min.   :-9.173  
+ Class :character   2:33072   Class :character   1st Qu.:-5.479  
+ Mode  :character   3:17472   Mode  :character   Median :-5.011  
+                    4:19968                      Mean   :-3.316  
+                                                 3rd Qu.:-1.815  
+                                                 Max.   : 6.834  
+     CpGs              chrom               logFC          
+ Length:73944       Length:73944       Min.   :-0.068234  
+ Class :character   Class :character   1st Qu.:-0.011853  
+ Mode  :character   Mode  :character   Median :-0.007394  
+                                       Mean   :-0.003419  
+                                       3rd Qu.: 0.007900  
+                                       Max.   : 0.050861  
+    p-value           direction         Nearest_Probe     
+ Min.   :0.0005027   Length:73944       Length:73944      
+ 1st Qu.:0.0168901   Class :character   Class :character  
+ Median :0.0394770   Mode  :character   Mode  :character  
+ Mean   :0.0439951                                        
+ 3rd Qu.:0.0709698                                        
+ Max.   :0.0995257                                        
+   Distance          med_M_unexp    
+ Length:73944       Min.   :-6.368  
+ Class :character   1st Qu.:-5.468  
+ Mode  :character   Median :-5.087  
+                    Mean   :-3.312  
+                    3rd Qu.:-1.914  
+                    Max.   : 5.611  
+[1] &quot;Scores are complete for the variable: bmicat and the p-value threshold of: 0.1&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r">  <span class='fu'>gress_graph</span><span class='op'>(</span><span class='va'>M_score_pg_1E_01</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>(Intercept)     bmicat1     bmicat3     bmicat4 
+  -8.293362    6.441864    2.134842    2.712726 
+                2.5 %    97.5 %
+(Intercept) -17.08768  0.500951
+bmicat1     -22.23942 35.123144
+bmicat3     -12.82288 17.092563
+bmicat4     -11.62025 17.045704
+[1] 0.001265498
+          lik          infl          vari           aic 
+-2.460468e+05  3.433483e+00  3.336728e+00  4.921005e+05 </code></pre>
+<p><img src="projects_files/figure-html5/results-3.png" width="624" /></p>
+</div>
+<h3 id="discussion-of-the-results">Discussion of the results</h3>
+<p>The model with the most stringent pruning threshold has the best discrimination, with an <span class="math inline">\(R^{2}\)</span> of 2.0%. Additionally, since only 2 methylation loci were included, it was the most parsimonious model as well, with an AIC of just 91.24.</p>
+<p>Additionally, the effect estimates are fairly intuitive. Children with mothers with “normal” and “overweight” BMIs have comparable slight decrease in epigenetic risk, whereas those who were underweight had highest risk and those who were obese had the second highest risk. This makes intuitive sense given the risk</p>
+<p><strong>Limitations:</strong></p>
+<ul>
+<li><p>Did not adjust for confounding factors in the validation set, but the effect estimates included in the risk score itself should be un-confounded, assuming the study where the summary statistics came from properly accounted for confounding. I think this is a fair assumption. Their quality control procedures were quite comprehensive!</p></li>
+<li><p>Did not account for global differences in methylation, just single site changes. The normalization steps in the publicly available studies may have diluted global changes.</p></li>
+</ul>
+<p><strong>Future perspectives:</strong></p>
+<ul>
+<li><p>How much does the epigenetic risk score explain independently when included in a model with other covariates?</p></li>
+<li><p>How is the risk score associated with child health outcomes?</p></li>
+</ul>
+<hr />
+<h2 id="behavioral-risk-factors-of-excessive-daytime-sleepiness-in-nhanes-2017-18">Behavioral Risk Factors of Excessive Daytime Sleepiness in NHANES 2017-18</h2>
+<h3 id="background-1">Background</h3>
 <p>Insufficient sleep duration and quality is associated with both morbidity and mortality from cardiometabolic disorders and affects neurobehavioral functioning (Gangwesh at al., 2006; Hall et al., 2008).</p>
 <p>The 20th century has seen a downward trend in sleep duration and quality (Bixler, 2009).</p>
 <p>Studies have identified health behaviors and personal characteristics that contribute to shortened sleep duration, such as age, race, obesity, low physical activity, heavy alcohol use, high caffeine consumption, smoking (Bixler, 2009; Phillips, 1995; Temple et al., 2017; Schoenborn &amp; Adams, 2019; Stein &amp; Friedmann, 2005; Kredlow, 2015).</p>
@@ -2532,7 +3460,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
 <span class='co'>## dichotomize daytime sleepiness </span>
-<span class='va'>SLQ_filt</span> <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>SLQ_filt</span>, day_sleep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>SLQ_filt</span><span class='op'>$</span><span class='va'>SLQ120</span> <span class='op'>==</span> <span class='st'>'3'</span> <span class='op'>|</span> <span class='va'>SLQ_filt</span><span class='op'>$</span><span class='va'>SLQ120</span> <span class='op'>==</span> <span class='st'>'4'</span>,<span class='fl'>1</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>SLQ_filt</span> <span class='op'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>SLQ_filt</span>, day_sleep <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>SLQ_filt</span><span class='op'>$</span><span class='va'>SLQ120</span> <span class='op'>==</span> <span class='st'>'3'</span> <span class='op'>|</span> <span class='va'>SLQ_filt</span><span class='op'>$</span><span class='va'>SLQ120</span> <span class='op'>==</span> <span class='st'>'4'</span>,<span class='fl'>1</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://rdrr.io/r/utils/write.table.html'>write.csv</a></span><span class='op'>(</span><span class='va'>SLQ_filt</span>,file<span class='op'>=</span><span class='st'>"Sleep_NHANES_2017.csv"</span><span class='op'>)</span>
 </code></pre>
@@ -2772,14 +3700,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>Regular moderate or vigorous activity reported? 1 = yes; 0 = no</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>one_tmp</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>one_tmp</span>, activity<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>PAQ605</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ620</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ650</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ665</span><span class='op'>==</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>one_tmp</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>one_tmp</span>, activity<span class='op'>=</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>PAQ605</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ620</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ650</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>PAQ665</span><span class='op'>==</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
 <p>Recommended caffeine dose is 400 mg. Dichotomize to above and below that threshold:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>one_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>one_tmp</span>, hi_caffeine<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>avg_mg_caffeine</span><span class='op'>&gt;</span><span class='fl'>400.0</span>,<span class='fl'>1</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>one_tmp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>one_tmp</span>, hi_caffeine<span class='op'>=</span><span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>avg_mg_caffeine</span><span class='op'>&gt;</span><span class='fl'>400.0</span>,<span class='fl'>1</span>,<span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -2797,9 +3725,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>one_tmp</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>one_tmp</span>, 
-                   heavy_drink <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>ALQ130</span><span class='op'>&gt;</span><span class='fl'>2</span> <span class='op'>&amp;</span> <span class='va'>RIAGENDR</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> 
+                   heavy_drink <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='op'>(</span><span class='va'>ALQ130</span><span class='op'>&gt;</span><span class='fl'>2</span> <span class='op'>&amp;</span> <span class='va'>RIAGENDR</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span> 
                                         <span class='op'>|</span> <span class='op'>(</span><span class='va'>ALQ130</span><span class='op'>&gt;</span><span class='fl'>1</span> <span class='op'>&amp;</span> <span class='va'>RIAGENDR</span> <span class='op'>==</span> <span class='fl'>2</span><span class='op'>)</span>,<span class='fl'>1</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>one_tmp</span> <span class='op'>=</span> <span class='va'>one_tmp</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>heavy_drink2 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>ALQ111</span><span class='op'>==</span><span class='fl'>2</span> <span class='op'>|</span> <span class='va'>ALQ121</span><span class='op'>==</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>heavy_drink</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>one_tmp</span> <span class='op'>=</span> <span class='va'>one_tmp</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>heavy_drink2 <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/fifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>ALQ111</span><span class='op'>==</span><span class='fl'>2</span> <span class='op'>|</span> <span class='va'>ALQ121</span><span class='op'>==</span><span class='fl'>0</span>, <span class='fl'>0</span>, <span class='va'>heavy_drink</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -3009,9 +3937,9 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
 <span class='va'>data</span><span class='op'>$</span><span class='va'>depress_cat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>ordered</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>depress_cat</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"nodep"</span>,<span class='st'>"mild_dep"</span>,<span class='st'>"mod_dep"</span>,<span class='st'>"mod_sev_dep"</span>,<span class='st'>"sev_dep"</span><span class='op'>)</span><span class='op'>)</span>
 
 <span class='co'>#Set reference groups for statistical models</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>raceEthCat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>raceEthCat</span>, ref <span class='op'>=</span> <span class='st'>"NH White"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>BMI_cat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>BMI_cat</span>, ref <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>ageCat_18</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>ageCat_18</span>, ref <span class='op'>=</span> <span class='st'>"18-39"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/transform.data.table.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>raceEthCat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>raceEthCat</span>, ref <span class='op'>=</span> <span class='st'>"NH White"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/transform.data.table.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>BMI_cat</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>BMI_cat</span>, ref <span class='op'>=</span> <span class='st'>"normal"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/transform.data.table.html'>within</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>ageCat_18</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/relevel.html'>relevel</a></span><span class='op'>(</span><span class='va'>ageCat_18</span>, ref <span class='op'>=</span> <span class='st'>"18-39"</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -3068,7 +3996,7 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
         legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Low Caffeine Intake"</span>, <span class='st'>"High Caffeine Intake"</span><span class='op'>)</span>, beside<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-28-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-29-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#dev.off()</span>
 </code></pre>
@@ -3085,7 +4013,7 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
         legend <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"No Depression"</span>, <span class='st'>"Mild Depression"</span>, <span class='st'>"Moderate Depression"</span>, <span class='st'>"Moderate/severe Depression"</span>, <span class='st'>"Severe Depression"</span><span class='op'>)</span>, beside<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-29-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-30-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#dev.off()</span>
 </code></pre>
@@ -3124,7 +4052,7 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
   <span class='fu'><a href='https://rdrr.io/r/graphics/pairs.html'>pairs</a></span><span class='op'>(</span>upper.panel<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-30-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-31-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#dev.off()</span>
 
@@ -3134,7 +4062,7 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
   <span class='fu'><a href='https://rdrr.io/r/graphics/pairs.html'>pairs</a></span><span class='op'>(</span>upper.panel<span class='op'>=</span><span class='cn'>NULL</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-30-2.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-31-2.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'>#dev.off()</span>
 </code></pre>
@@ -3148,8 +4076,8 @@ $ inAnalysis      &lt;lgl&gt; FALSE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE,~</cod
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>NHANES_all</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='va'>data</span>, id<span class='op'>=</span><span class='op'>~</span><span class='va'>SDMVPSU</span>, strata<span class='op'>=</span><span class='op'>~</span><span class='va'>SDMVSTRA</span>, weights<span class='op'>=</span><span class='op'>~</span><span class='va'>WTINT2YR</span>, nest<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 <span class='va'>NHANES_all_MEC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/survey/man/svydesign.html'>svydesign</a></span><span class='op'>(</span>data<span class='op'>=</span><span class='va'>data</span>, id<span class='op'>=</span><span class='op'>~</span><span class='va'>SDMVPSU</span>, strata<span class='op'>=</span><span class='op'>~</span><span class='va'>SDMVSTRA</span>, weights<span class='op'>=</span><span class='op'>~</span><span class='va'>WTMEC2YR</span>, nest<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span>
 
-<span class='va'>NHANES</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>NHANES_all</span>, <span class='va'>inAnalysis</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>NHANES_MEC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span><span class='op'>(</span><span class='va'>NHANES_all_MEC</span>, <span class='va'>inAnalysis</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>NHANES</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html'>subset</a></span><span class='op'>(</span><span class='va'>NHANES_all</span>, <span class='va'>inAnalysis</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
+<span class='va'>NHANES_MEC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/subset.data.table.html'>subset</a></span><span class='op'>(</span><span class='va'>NHANES_all_MEC</span>, <span class='va'>inAnalysis</span><span class='op'>==</span><span class='fl'>1</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -4202,7 +5130,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Fitted values"</span>, y <span class='op'>=</span> <span class='st'>"Pearson Residuals"</span>, title <span class='op'>=</span> <span class='st'>"Residuals vs. Fitted values"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-45-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-46-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"pearson_resids_weighted.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4223,7 +5151,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Fitted values"</span>, y <span class='op'>=</span> <span class='st'>"Pearson Residuals"</span>, title <span class='op'>=</span> <span class='st'>"Residuals vs. Fitted values"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-46-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-47-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"pearson_resids_unweighted.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4245,7 +5173,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Fitted values"</span>, y <span class='op'>=</span> <span class='st'>"Pearson Residuals"</span>, title <span class='op'>=</span> <span class='st'>"Residuals vs. Fitted values"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-47-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-48-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"pearson_resids_final_behave_model.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4265,7 +5193,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Q-Q plot of deviance residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-48-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-49-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"Q-Q_final_behav_mod.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 
@@ -4281,7 +5209,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Q-Q plot of deviance residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-48-2.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-49-2.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"Q-Q_all_variables.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4298,7 +5226,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"Pearson residuals"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of pearson residuals"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-49-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-50-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Looking at the plot we can filter to see which observation is the outlier</span>
 <span class='va'>fit_dat_fin_apriori</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> 
@@ -4364,7 +5292,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"Leverage values"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of leverages"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-50-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-51-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>fit_dat_fin_apriori</span><span class='op'>$</span><span class='va'>lev</span><span class='op'>)</span>
 </code></pre>
@@ -4413,7 +5341,7 @@ $ lev                             &lt;dbl&gt; 0.010388046, 0.011440973, 0.~</cod
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>y<span class='op'>=</span><span class='st'>"DFITS values"</span>, title<span class='op'>=</span><span class='st'>"Boxplot of DFIT values"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-51-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-52-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"dfits_apriori.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 
@@ -4494,7 +5422,7 @@ $ lev                             &lt;dbl&gt; 0.010388046, 0.011440973, 0.~</cod
   <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>title<span class='op'>=</span><span class='st'>"Leverage-Residual Plot"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="projects_files/figure-html5/unnamed-chunk-52-1.png" width="624" />
+<img src="projects_files/figure-html5/unnamed-chunk-53-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggsave.html'>ggsave</a></span><span class='op'>(</span><span class='st'>"L-R plot apriori.png"</span>, width <span class='op'>=</span> <span class='fl'>6</span>, height <span class='op'>=</span> <span class='fl'>4</span>, units <span class='op'>=</span> <span class='st'>"in"</span><span class='op'>)</span>
 </code></pre>
@@ -4678,32 +5606,32 @@ raceEthCat   1.134959  4        1.015950
 hi_caffeine  1.092136  1        1.045053
 heavy_drink2 1.145752  1        1.070398</code></pre>
 </div>
-<h3 id="results">Results</h3>
+<h3 id="results-1">Results</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>unweighted_data</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>day_sleep</span>, <span class='va'>RIAGENDR</span>, <span class='va'>ageCat_18</span>, <span class='va'>INDFMPIR</span>, <span class='va'>SMQ681</span>, <span class='va'>raceEthCat</span>, <span class='va'>activity</span>, <span class='va'>hi_caffeine</span>, <span class='va'>BMI_cat</span>, <span class='va'>heavy_drink2</span>, <span class='va'>depress_cat</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/tbl_uvregression.html'>tbl_uvregression</a></span><span class='op'>(</span>
     method <span class='op'>=</span> <span class='va'>glm</span>,
     y <span class='op'>=</span> <span class='va'>day_sleep</span>,
     method.args <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/family.html'>binomial</a></span><span class='op'>(</span>link<span class='op'>=</span><span class='st'>"log"</span><span class='op'>)</span><span class='op'>)</span>,
     exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span>,
-    pvalue_fun <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/style_pvalue.html'>style_pvalue</a></span><span class='op'>(</span><span class='va'>.x</span>, digits <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
+    pvalue_fun <span class='op'>=</span> <span class='op'>~</span><span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/style_pvalue.html'>style_pvalue</a></span><span class='op'>(</span><span class='va'>.x</span>, digits <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
   <span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Crude Table"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Crude Table"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<div id="bvjskpzird" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="lgiluwmvbu" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#bvjskpzird .gt_table {
+#lgiluwmvbu .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -4728,7 +5656,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_heading {
+#lgiluwmvbu .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -4740,7 +5668,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_title {
+#lgiluwmvbu .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -4750,7 +5678,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-width: 0;
 }
 
-#bvjskpzird .gt_subtitle {
+#lgiluwmvbu .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -4760,13 +5688,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-width: 0;
 }
 
-#bvjskpzird .gt_bottom_border {
+#lgiluwmvbu .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_col_headings {
+#lgiluwmvbu .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4781,7 +5709,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_col_heading {
+#lgiluwmvbu .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4801,7 +5729,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#bvjskpzird .gt_column_spanner_outer {
+#lgiluwmvbu .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4813,15 +5741,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 4px;
 }
 
-#bvjskpzird .gt_column_spanner_outer:first-child {
+#lgiluwmvbu .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#bvjskpzird .gt_column_spanner_outer:last-child {
+#lgiluwmvbu .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#bvjskpzird .gt_column_spanner {
+#lgiluwmvbu .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -4833,7 +5761,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   width: 100%;
 }
 
-#bvjskpzird .gt_group_heading {
+#lgiluwmvbu .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4855,7 +5783,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#bvjskpzird .gt_empty_group_heading {
+#lgiluwmvbu .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -4870,15 +5798,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#bvjskpzird .gt_from_md > :first-child {
+#lgiluwmvbu .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#bvjskpzird .gt_from_md > :last-child {
+#lgiluwmvbu .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#bvjskpzird .gt_row {
+#lgiluwmvbu .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4897,7 +5825,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#bvjskpzird .gt_stub {
+#lgiluwmvbu .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -4909,7 +5837,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-left: 12px;
 }
 
-#bvjskpzird .gt_summary_row {
+#lgiluwmvbu .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4919,7 +5847,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#bvjskpzird .gt_first_summary_row {
+#lgiluwmvbu .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4929,7 +5857,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_grand_summary_row {
+#lgiluwmvbu .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -4939,7 +5867,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#bvjskpzird .gt_first_grand_summary_row {
+#lgiluwmvbu .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -4949,11 +5877,11 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_striped {
+#lgiluwmvbu .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#bvjskpzird .gt_table_body {
+#lgiluwmvbu .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -4962,7 +5890,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_footnotes {
+#lgiluwmvbu .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4976,13 +5904,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_footnote {
+#lgiluwmvbu .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#bvjskpzird .gt_sourcenotes {
+#lgiluwmvbu .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -4996,48 +5924,48 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#bvjskpzird .gt_sourcenote {
+#lgiluwmvbu .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#bvjskpzird .gt_left {
+#lgiluwmvbu .gt_left {
   text-align: left;
 }
 
-#bvjskpzird .gt_center {
+#lgiluwmvbu .gt_center {
   text-align: center;
 }
 
-#bvjskpzird .gt_right {
+#lgiluwmvbu .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#bvjskpzird .gt_font_normal {
+#lgiluwmvbu .gt_font_normal {
   font-weight: normal;
 }
 
-#bvjskpzird .gt_font_bold {
+#lgiluwmvbu .gt_font_bold {
   font-weight: bold;
 }
 
-#bvjskpzird .gt_font_italic {
+#lgiluwmvbu .gt_font_italic {
   font-style: italic;
 }
 
-#bvjskpzird .gt_super {
+#lgiluwmvbu .gt_super {
   font-size: 65%;
 }
 
-#bvjskpzird .gt_footnote_marks {
+#lgiluwmvbu .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
 }
 </style>
 <table class="gt_table">
-  <caption><span id="tab:unnamed-chunk-56">Table 1: </span>Crude Table</caption>
+  <caption><span id="tab:unnamed-chunk-57">Table 1: </span>Crude Table</caption>
   
   <thead class="gt_col_headings">
     <tr>
@@ -5242,21 +6170,21 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mod_final_behav</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> 
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value </span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Final model"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
-  <span class='fu'><a href='http://www.danieldsjoberg.com/gtsummary//reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> 
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/tbl_regression.html'>tbl_regression</a></span><span class='op'>(</span>exponentiate <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/add_global_p.html'>add_global_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>  <span class='co'># add global p-value </span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/add_q.html'>add_q</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>         <span class='co'># adjusts global p-values for multiple testing</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_p.html'>bold_p</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>        <span class='co'># bold p-values under a given threshold (default 0.05)</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_p.html'>bold_p</a></span><span class='op'>(</span>t <span class='op'>=</span> <span class='fl'>0.10</span>, q <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span> <span class='co'># now bold q-values under the threshold of 0.10</span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/modify.html'>modify_caption</a></span><span class='op'>(</span><span class='st'>"Final model"</span><span class='op'>)</span> <span class='op'><a href='https://ggobi.github.io/ggally/reference/pipe.html'>%&gt;%</a></span>
+  <span class='fu'><a href='https://www.danieldsjoberg.com/gtsummary/reference/bold_italicize_labels_levels.html'>bold_labels</a></span><span class='op'>(</span><span class='op'>)</span> 
 </code></pre>
 </div>
-<div id="ggbleycrar" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="wuoesnpast" style="overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>html {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
 }
 
-#ggbleycrar .gt_table {
+#wuoesnpast .gt_table {
   display: table;
   border-collapse: collapse;
   margin-left: auto;
@@ -5281,7 +6209,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-left-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_heading {
+#wuoesnpast .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -5293,7 +6221,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_title {
+#wuoesnpast .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -5303,7 +6231,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-width: 0;
 }
 
-#ggbleycrar .gt_subtitle {
+#wuoesnpast .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -5313,13 +6241,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-width: 0;
 }
 
-#ggbleycrar .gt_bottom_border {
+#wuoesnpast .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_col_headings {
+#wuoesnpast .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5334,7 +6262,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_col_heading {
+#wuoesnpast .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5354,7 +6282,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#ggbleycrar .gt_column_spanner_outer {
+#wuoesnpast .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5366,15 +6294,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 4px;
 }
 
-#ggbleycrar .gt_column_spanner_outer:first-child {
+#wuoesnpast .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ggbleycrar .gt_column_spanner_outer:last-child {
+#wuoesnpast .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ggbleycrar .gt_column_spanner {
+#wuoesnpast .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -5386,7 +6314,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   width: 100%;
 }
 
-#ggbleycrar .gt_group_heading {
+#wuoesnpast .gt_group_heading {
   padding: 8px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5408,7 +6336,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#ggbleycrar .gt_empty_group_heading {
+#wuoesnpast .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -5423,15 +6351,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   vertical-align: middle;
 }
 
-#ggbleycrar .gt_from_md > :first-child {
+#wuoesnpast .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ggbleycrar .gt_from_md > :last-child {
+#wuoesnpast .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ggbleycrar .gt_row {
+#wuoesnpast .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5450,7 +6378,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   overflow-x: hidden;
 }
 
-#ggbleycrar .gt_stub {
+#wuoesnpast .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -5462,7 +6390,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-left: 12px;
 }
 
-#ggbleycrar .gt_summary_row {
+#wuoesnpast .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5472,7 +6400,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#ggbleycrar .gt_first_summary_row {
+#wuoesnpast .gt_first_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5482,7 +6410,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_grand_summary_row {
+#wuoesnpast .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -5492,7 +6420,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   padding-right: 5px;
 }
 
-#ggbleycrar .gt_first_grand_summary_row {
+#wuoesnpast .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -5502,11 +6430,11 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-top-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_striped {
+#wuoesnpast .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ggbleycrar .gt_table_body {
+#wuoesnpast .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -5515,7 +6443,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-bottom-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_footnotes {
+#wuoesnpast .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5529,13 +6457,13 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_footnote {
+#wuoesnpast .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding: 4px;
 }
 
-#ggbleycrar .gt_sourcenotes {
+#wuoesnpast .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -5549,48 +6477,48 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
   border-right-color: #D3D3D3;
 }
 
-#ggbleycrar .gt_sourcenote {
+#wuoesnpast .gt_sourcenote {
   font-size: 90%;
   padding: 4px;
 }
 
-#ggbleycrar .gt_left {
+#wuoesnpast .gt_left {
   text-align: left;
 }
 
-#ggbleycrar .gt_center {
+#wuoesnpast .gt_center {
   text-align: center;
 }
 
-#ggbleycrar .gt_right {
+#wuoesnpast .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ggbleycrar .gt_font_normal {
+#wuoesnpast .gt_font_normal {
   font-weight: normal;
 }
 
-#ggbleycrar .gt_font_bold {
+#wuoesnpast .gt_font_bold {
   font-weight: bold;
 }
 
-#ggbleycrar .gt_font_italic {
+#wuoesnpast .gt_font_italic {
   font-style: italic;
 }
 
-#ggbleycrar .gt_super {
+#wuoesnpast .gt_super {
   font-size: 65%;
 }
 
-#ggbleycrar .gt_footnote_marks {
+#wuoesnpast .gt_footnote_marks {
   font-style: italic;
   font-weight: normal;
   font-size: 65%;
 }
 </style>
 <table class="gt_table">
-  <caption><span id="tab:unnamed-chunk-57">Table 2: </span>Final model</caption>
+  <caption><span id="tab:unnamed-chunk-58">Table 2: </span>Final model</caption>
   
   <thead class="gt_col_headings">
     <tr>
@@ -5746,7 +6674,7 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
 <p>Conflicting results emphasize the need for more research is needed to uncover the links between age, race, alcohol use, tobacco smoking and exercise on sleep quality</p>
 <p>High daily caffeine consumption is a modifiable risk factor that could play a role in causing excessive sleepiness during the day.</p>
 <p>Based on these results and the results of previous research, it may be clinically advisable to address sleep hygiene in people with depression and obesity to prevent future morbidity and mortality.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -5754,6 +6682,15 @@ heavy_drink2 1.145752  1        1.070398</code></pre>
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
