@@ -163,8 +163,10 @@ I developed an imputation function that finds the nearest probe on the array tha
 
       closest_probe[,1] %in% rownames(M_regress)
       # All TRUE! :)
-
-      closest_probe
+      
+      # The first column are the probes that were substituted, the second is the nearest probe that my imputation function found. The third column is the distance between the two probes in base-pairs. 
+      
+      head(closest_probe)
 
       # Subset M-matrix to these probes (all 50)
 
@@ -533,8 +535,6 @@ I will merge all of the component files by the individuals' identifying number (
 
 temp = list.files(".","*.csv")
 myfiles = lapply(temp, read.csv)
-
-myfiles
 
 one_tmp <- myfiles[[5]] #This is the demographic dataset
 
