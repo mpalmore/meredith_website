@@ -43,7 +43,7 @@ One of my colleagues, Ellen Howerton, kindly provided me with the function for t
 * Here, I have included one variable to score, BMI category, as well as scoring by p-value threshold, but it could be modified to be multiple variables and a CpG list to be more generalizable.
 
 
-### Step 1: Wrangling the Data
+### Wrangling the Data
 
 
 #### Part 1. Load packages 
@@ -557,7 +557,6 @@ head(one_tmp)
 Some of the data are labeled as numeric values if they were missing. Referring to NHANES documentation, you can see which numbers correspond to missing data, depending on the variable. It would be a good idea to convert them into simple NAs. 
 
 ```{r}
-summary(one_tmp)
 
 one_tmp <- one_tmp %>%
    mutate(across(starts_with('ALQ'), ~ case_when(. ==  77 ~ NA_integer_, . == 99 ~ NA_integer_, . == 777 ~ NA_integer_, . == 999 ~ NA_integer_, TRUE ~ as.integer(.))))
@@ -629,7 +628,6 @@ Regular moderate or vigorous activity reported? 1 = yes; 0 = no
 ```{r}
 one_tmp <-  mutate(one_tmp,activity=ifelse(PAQ605==1|PAQ620==1|PAQ650==1|PAQ665==1, 1, 0))
 
-one_tmp$activity
 ```
 
 Recommended caffeine dose is 400 mg. Dichotomize to above and below that threshold:
@@ -682,13 +680,6 @@ missing
 ```
 
 Missingness: No individuals were missing the outcome. Missingness was below 15% for all covariates except for high caffeine intake, which was missing at a rate of 26%.
-
-
-The data looks better now. Re-write full dataset to csv:
-
-```{r}
-write.csv(one_tmp, "fulldata_2018_NHANES_adults.csv")
-```
 
 
 Now that we have cleaned the NHANES data to our liking, it is time to conduct the analysis. 
